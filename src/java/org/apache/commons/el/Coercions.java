@@ -74,9 +74,17 @@ import javax.servlet.jsp.el.ELException;
  *   Binary operator - A {+,-,*} B
  *     if A and B are null
  *       return 0
+ *     if A or B is BigDecimal, coerce both to BigDecimal and then:
+ *       if operator is +, return <code>A.add(B)</code>
+ *       if operator is -, return <code>A.subtract(B)</code>
+ *       if operator is *, return <code>A.multiply(B)</code>
  *     if A or B is Float, Double, or String containing ".", "e", or "E"
- *       coerce both A and B to Double
- *       apply operator
+ *       if A or B is BigInteger, coerce both A and B to BigDecimal and apply operator
+ *       coerce both A and B to Double and apply operator
+ *     if A or B is BigInteger, coerce both to BigInteger and then:
+ *       if operator is +, return <code>A.add(B)</code>
+ *       if operator is -, return <code>A.subtract(B)</code>
+ *       if operator is *, return <code>A.multiply(B)</code>
  *     otherwise
  *       coerce both A and B to Long
  *       apply operator
@@ -85,6 +93,8 @@ import javax.servlet.jsp.el.ELException;
  *   Binary operator - A {/,div} B
  *     if A and B are null
  *       return 0
+ *     if A or B is a BigDecimal or BigInteger, coerce both to BigDecimal and
+ *      return <code>A.divide(B, BigDecimal.ROUND_HALF_UP)</code>
  *     otherwise
  *       coerce both A and B to Double
  *       apply operator
@@ -93,9 +103,11 @@ import javax.servlet.jsp.el.ELException;
  *   Binary operator - A {%,mod} B
  *     if A and B are null
  *       return 0
- *     if A or B is Float, Double, or String containing ".", "e" or "E"
+ *     if A or B is BigDecimal, Float, Double, or String containing ".", "e" or "E"
  *       coerce both to Double
  *       apply operator
+ *     if A or B is BigInteger, coerce both to BigInteger and return
+ *      <code>A.remainder(B)</code>
  *     otherwise
  *       coerce both A and B to Long
  *       apply operator
@@ -104,6 +116,7 @@ import javax.servlet.jsp.el.ELException;
  *   Unary minus operator - -A
  *     if A is null
  *       return 0
+ *     if A is BigInteger or BigDecimal, return <code>A.negate()</code>
  *     if A is String
  *       if A contains ".", "e", or "E"
  *         coerce to Double, apply operator
@@ -126,6 +139,8 @@ import javax.servlet.jsp.el.ELException;
  *     return true
  *   if A is Map and ((Map) A).isEmpty()
  *     return true
+ *   if A is Collection an ((Collection) A).isEmpty()
+ *     return true
  *   otherwise
  *     return false
  * 
@@ -146,9 +161,13 @@ import javax.servlet.jsp.el.ELException;
  *         return false
  *     if A or B is null
  *       return false
+ *     if A or B is BigDecimal, coerce both A and B to BigDecimal and use the
+ *      return value of <code>A.compareTo(B)</code>
  *     if A or B is Float or Double
  *       coerce both A and B to Double
  *       apply operator
+ *     if A or B is BigInteger, coerce both A and B to BigInteger and use the
+ *      return value of <code>A.compareTo(B)</code>
  *     if A or B is Byte,Short,Character,Integer,Long
  *       coerce both A and B to Long
  *       apply operator
@@ -173,9 +192,15 @@ import javax.servlet.jsp.el.ELException;
  *       apply operator
  *     if A or B is null
  *       return false for ==, true for !=
+ *     if A or B is BigDecimal, coerce both A and B to BigDecimal and then:
+ *       if operator is == or eq, return <code>A.equals(B)</code>
+ *       if operator is != or ne, return <code>!A.equals(B)</code>
  *     if A or B is Float or Double
  *       coerce both A and B to Double
  *       apply operator
+ *     if A or B is BigInteger, coerce both A and B to BigInteger and then:
+ *       if operator is == or eq, return <code>A.equals(B)</code>
+ *       if operator is != or ne, return <code>!A.equals(B)</code>
  *     if A or B is Byte,Short,Character,Integer,Long
  *       coerce both A and B to Long
  *       apply operator
@@ -805,18 +830,42 @@ public class Coercions
       return PrimitiveObjects.getInteger (0);
     }
 
-    else if (isFloatingPointType (pLeft) ||
-	     isFloatingPointType (pRight) ||
-	     isFloatingPointString (pLeft) ||
-	     isFloatingPointString (pRight)) {
-      double left =
-	coerceToPrimitiveNumber (pLeft, Double.class, pLogger).
-	doubleValue ();
-      double right =
-	coerceToPrimitiveNumber (pRight, Double.class, pLogger).
-	doubleValue ();
-      return 
-	PrimitiveObjects.getDouble (pOperator.apply (left, right, pLogger));
+    else if (isBigDecimal(pLeft) || isBigDecimal(pRight)) {
+        BigDecimal left = (BigDecimal)
+            coerceToPrimitiveNumber(pLeft, BigDecimal.class, pLogger);
+        BigDecimal right = (BigDecimal)
+            coerceToPrimitiveNumber(pRight, BigDecimal.class, pLogger);
+        return pOperator.apply(left, right);
+    }
+
+    else if (isFloatingPointType(pLeft) ||
+        isFloatingPointType(pRight) ||
+        isFloatingPointString(pLeft) ||
+        isFloatingPointString(pRight)) {
+        if (isBigInteger(pLeft) || isBigInteger(pRight)) {
+            BigDecimal left = (BigDecimal)
+                coerceToPrimitiveNumber(pLeft, BigDecimal.class, pLogger);
+            BigDecimal right = (BigDecimal)
+                coerceToPrimitiveNumber(pRight, BigDecimal.class, pLogger);
+            return pOperator.apply(left, right);
+        } else {
+            double left =
+                coerceToPrimitiveNumber(pLeft, Double.class, pLogger).
+                doubleValue();
+            double right =
+                coerceToPrimitiveNumber(pRight, Double.class, pLogger).
+                doubleValue();
+            return
+                PrimitiveObjects.getDouble(pOperator.apply(left, right));
+        }
+    }
+
+    else if (isBigInteger(pLeft) || isBigInteger(pRight)) {
+        BigInteger left = (BigInteger)
+            coerceToPrimitiveNumber(pLeft, BigInteger.class, pLogger);
+        BigInteger right = (BigInteger)
+            coerceToPrimitiveNumber(pRight, BigInteger.class, pLogger);
+        return pOperator.apply(left, right);
     }
 
     else {
@@ -827,7 +876,7 @@ public class Coercions
 	coerceToPrimitiveNumber (pRight, Long.class, pLogger).
 	longValue ();
       return
-	PrimitiveObjects.getLong (pOperator.apply (left, right, pLogger));
+	PrimitiveObjects.getLong (pOperator.apply (left, right));
     }
   }
 
@@ -844,7 +893,15 @@ public class Coercions
      Logger pLogger)
     throws ELException
   {
-    if (isFloatingPointType (pLeft) ||
+    if (isBigDecimal(pLeft) || isBigDecimal(pRight)) {
+        BigDecimal left = (BigDecimal)
+            coerceToPrimitiveNumber(pLeft, BigDecimal.class, pLogger);
+        BigDecimal right = (BigDecimal)
+            coerceToPrimitiveNumber(pRight, BigDecimal.class, pLogger);
+        return PrimitiveObjects.getBoolean(pOperator.apply(left, right));
+    }
+
+    else if (isFloatingPointType (pLeft) ||
 	isFloatingPointType (pRight)) {
       double left =
 	coerceToPrimitiveNumber (pLeft, Double.class, pLogger).
@@ -853,7 +910,15 @@ public class Coercions
 	coerceToPrimitiveNumber (pRight, Double.class, pLogger).
 	doubleValue ();
       return 
-	PrimitiveObjects.getBoolean (pOperator.apply (left, right, pLogger));
+	PrimitiveObjects.getBoolean (pOperator.apply (left, right));
+    }
+
+    else if (isBigInteger(pLeft) || isBigInteger(pRight)) {
+        BigInteger left = (BigInteger)
+            coerceToPrimitiveNumber(pLeft, BigInteger.class, pLogger);
+        BigInteger right = (BigInteger)
+            coerceToPrimitiveNumber(pRight, BigInteger.class, pLogger);
+        return PrimitiveObjects.getBoolean(pOperator.apply(left, right));
     }
 
     else if (isIntegerType (pLeft) ||
@@ -865,7 +930,7 @@ public class Coercions
 	coerceToPrimitiveNumber (pRight, Long.class, pLogger).
 	longValue ();
       return
-	PrimitiveObjects.getBoolean (pOperator.apply (left, right, pLogger));
+	PrimitiveObjects.getBoolean (pOperator.apply (left, right));
     }
 
     else if (pLeft instanceof String ||
@@ -873,7 +938,7 @@ public class Coercions
       String left = coerceToString (pLeft, pLogger);
       String right = coerceToString (pRight, pLogger);
       return
-	PrimitiveObjects.getBoolean (pOperator.apply (left, right, pLogger));
+	PrimitiveObjects.getBoolean (pOperator.apply (left, right));
     }
 
     else if (pLeft instanceof Comparable) {
@@ -881,7 +946,7 @@ public class Coercions
 	int result = ((Comparable) pLeft).compareTo (pRight);
 	return
 	  PrimitiveObjects.getBoolean 
-	  (pOperator.apply (result, -result, pLogger));
+	  (pOperator.apply (result, -result));
       }
       catch (Exception exc) {
 	if (pLogger.isLoggingError ()) {
@@ -901,7 +966,7 @@ public class Coercions
 	int result = ((Comparable) pRight).compareTo (pLeft);
 	return
 	  PrimitiveObjects.getBoolean 
-	  (pOperator.apply (-result, result, pLogger));
+	  (pOperator.apply (-result, result));
       }
       catch (Exception exc) {
 	if (pLogger.isLoggingError ()) {
@@ -950,6 +1015,14 @@ public class Coercions
       return PrimitiveObjects.getBoolean (pOperator.apply (false, pLogger));
     }
 
+    else if (isBigDecimal(pLeft) || isBigDecimal(pRight)) {
+        BigDecimal left = (BigDecimal)
+            coerceToPrimitiveNumber(pLeft, BigDecimal.class, pLogger);
+        BigDecimal right = (BigDecimal)
+            coerceToPrimitiveNumber(pRight, BigDecimal.class, pLogger);
+        return PrimitiveObjects.getBoolean(pOperator.apply(left.equals(right), pLogger));
+    }
+
     else if (isFloatingPointType (pLeft) ||
 	     isFloatingPointType (pRight)) {
       double left =
@@ -961,6 +1034,14 @@ public class Coercions
       return 
 	PrimitiveObjects.getBoolean 
 	(pOperator.apply (left == right, pLogger));
+    }
+
+    else if (isBigInteger(pLeft) || isBigInteger(pRight)) {
+        BigInteger left = (BigInteger)
+            coerceToPrimitiveNumber(pLeft, BigInteger.class, pLogger);
+        BigInteger right = (BigInteger)
+            coerceToPrimitiveNumber(pRight, BigInteger.class, pLogger);
+        return PrimitiveObjects.getBoolean(pOperator.apply(left.equals(right), pLogger));
     }
 
     else if (isIntegerType (pLeft) ||
@@ -1100,4 +1181,23 @@ public class Coercions
 
   //-------------------------------------
 
+  /**
+   * Returns true if the given object is BigInteger.
+   * @param pObject - Object to evaluate
+   * @return - true if the given object is BigInteger
+   */
+  public static boolean isBigInteger(Object pObject) {
+      return
+          pObject != null && pObject instanceof BigInteger;
+  }
+
+  /**
+   * Returns true if the given object is BigDecimal.
+   * @param pObject - Object to evaluate
+   * @return - true if the given object is BigDecimal
+   */
+  public static boolean isBigDecimal(Object pObject) {
+      return
+          pObject != null && pObject instanceof BigDecimal;
+  }
 }

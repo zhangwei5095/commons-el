@@ -56,6 +56,8 @@
 package org.apache.commons.el;
 
 import javax.servlet.jsp.el.ELException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  *
@@ -86,18 +88,30 @@ public abstract class ArithmeticOperator
    *
    * Applies the operator to the given double values, returning a double
    **/
-  public abstract double apply (double pLeft,
-				double pRight,
-				Logger pLogger);
+  public abstract double apply (double pLeft, double pRight);
   
   //-------------------------------------
   /**
    *
    * Applies the operator to the given double values, returning a double
    **/
-  public abstract long apply (long pLeft,
-			      long pRight,
-			      Logger pLogger);
+  public abstract long apply (long pLeft, long pRight);
   
   //-------------------------------------
+
+    /**
+     *
+     * Applies the operator to the given BigDecimal values, returning a BigDecimal
+     **/
+    public abstract BigDecimal apply(BigDecimal pLeft, BigDecimal pRight);
+
+    //-------------------------------------
+
+    /**
+     *
+     * Applies the operator to the given BigDecimal values, returning a BigDecimal
+     **/
+    public abstract BigInteger apply(BigInteger pLeft, BigInteger pRight);
+
+    //-------------------------------------
 }

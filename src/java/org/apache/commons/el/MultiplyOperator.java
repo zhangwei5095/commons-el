@@ -55,6 +55,9 @@
 
 package org.apache.commons.el;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 /**
  *
  * <p>The implementation of the multiply operator
@@ -100,8 +103,8 @@ public class MultiplyOperator
    * Applies the operator to the given double values, returning a double
    **/
   public double apply (double pLeft,
-		       double pRight,
-		       Logger pLogger)
+		       double pRight
+                       )
   {
     return pLeft * pRight;
   }
@@ -112,11 +115,35 @@ public class MultiplyOperator
    * Applies the operator to the given double values, returning a double
    **/
   public long apply (long pLeft,
-		     long pRight,
-		     Logger pLogger)
+		     long pRight
+                     )
   {
     return pLeft * pRight;
   }
   
   //-------------------------------------
+
+    /**
+     *
+     * Applies the operator to the given BigDecimal values, returning a BigDecimal
+     **/
+    public BigDecimal apply(BigDecimal pLeft,
+                            BigDecimal pRight
+                            ) {
+        return pLeft.multiply(pRight);
+    }
+
+    //-------------------------------------
+
+    /**
+     *
+     * Applies the operator to the given BigInteger values, returning a BigInteger
+     **/
+    public BigInteger apply(BigInteger pLeft,
+                            BigInteger pRight
+                            ) {
+        return pLeft.multiply(pRight);
+    }
+
+    //-------------------------------------
 }

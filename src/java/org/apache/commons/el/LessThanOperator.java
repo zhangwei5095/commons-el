@@ -56,6 +56,8 @@
 package org.apache.commons.el;
 
 import javax.servlet.jsp.el.ELException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  *
@@ -123,10 +125,7 @@ public class LessThanOperator
    *
    * Applies the operator to the given double values
    **/
-  public boolean apply (double pLeft,
-			double pRight,
-			Logger pLogger)
-  {
+  public boolean apply (double pLeft, double pRight) {
     return pLeft < pRight;
   }
   
@@ -135,10 +134,7 @@ public class LessThanOperator
    *
    * Applies the operator to the given long values
    **/
-  public boolean apply (long pLeft,
-			long pRight,
-			Logger pLogger)
-  {
+  public boolean apply (long pLeft, long pRight) {
     return pLeft < pRight;
   }
   
@@ -147,12 +143,29 @@ public class LessThanOperator
    *
    * Applies the operator to the given String values
    **/
-  public boolean apply (String pLeft,
-			String pRight,
-			Logger pLogger)
-  {
+  public boolean apply (String pLeft, String pRight) {
     return pLeft.compareTo (pRight) < 0;
   }
 
   //-------------------------------------
+
+    /**
+     *
+     * Applies the operator to the given BigDecimal values, returning a BigDecimal
+     **/
+    public boolean apply(BigDecimal pLeft, BigDecimal pRight) {
+        return isLess(pLeft.compareTo(pRight));
+    }
+
+    //-------------------------------------
+
+    /**
+     *
+     * Applies the operator to the given BigDecimal values, returning a BigDecimal
+     **/
+    public boolean apply(BigInteger pLeft, BigInteger pRight) {
+        return isLess(pLeft.compareTo(pRight));
+    }
+
+    //-------------------------------------
 }

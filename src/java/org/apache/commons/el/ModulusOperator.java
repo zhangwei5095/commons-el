@@ -56,6 +56,7 @@
 package org.apache.commons.el;
 
 import javax.servlet.jsp.el.ELException;
+import java.math.BigInteger;
 
 /**
  *
@@ -119,9 +120,11 @@ public class ModulusOperator
     if ((pLeft != null &&
 	 (Coercions.isFloatingPointType (pLeft) ||
 	  Coercions.isFloatingPointString (pLeft))) ||
+      Coercions.isBigDecimal(pLeft) ||
 	(pRight != null &&
 	 (Coercions.isFloatingPointType (pRight) ||
-	  Coercions.isFloatingPointString (pRight)))) {
+	  Coercions.isFloatingPointString (pRight) ||
+      Coercions.isBigDecimal(pRight)))) {
       double left =
 	Coercions.coerceToPrimitiveNumber (pLeft, Double.class, pLogger).
 	doubleValue ();
@@ -142,6 +145,25 @@ public class ModulusOperator
 	}
 	return PrimitiveObjects.getInteger (0);
       }
+    }
+    else if (Coercions.isBigInteger(pLeft) || Coercions.isBigInteger(pRight)) {
+        BigInteger left = (BigInteger)
+             Coercions.coerceToPrimitiveNumber(pLeft, BigInteger.class, pLogger);
+        BigInteger right = (BigInteger)
+            Coercions.coerceToPrimitiveNumber(pRight, BigInteger.class, pLogger);
+
+        try {
+            return left.remainder(right);
+        } catch (Exception exc) {
+            if (pLogger.isLoggingError()) {
+                pLogger.logError
+                    (Constants.ARITH_ERROR,
+                        getOperatorSymbol(),
+                        "" + left,
+                        "" + right);
+            }
+            return PrimitiveObjects.getInteger(0);
+        }
     }
     else {
       long left =

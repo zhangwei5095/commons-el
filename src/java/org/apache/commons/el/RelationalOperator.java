@@ -56,6 +56,8 @@
 package org.apache.commons.el;
 
 import javax.servlet.jsp.el.ELException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  *
@@ -69,6 +71,7 @@ import javax.servlet.jsp.el.ELException;
 public abstract class RelationalOperator
   extends BinaryOperator
 {
+
   //-------------------------------------
   /**
    *
@@ -88,8 +91,8 @@ public abstract class RelationalOperator
    * Applies the operator to the given double values
    **/
   public abstract boolean apply (double pLeft,
-				 double pRight,
-				 Logger pLogger);
+				 double pRight
+                                 );
   
   //-------------------------------------
   /**
@@ -97,8 +100,8 @@ public abstract class RelationalOperator
    * Applies the operator to the given long values
    **/
   public abstract boolean apply (long pLeft,
-				 long pRight,
-				 Logger pLogger);
+				 long pRight
+                                 );
   
   //-------------------------------------
   /**
@@ -106,8 +109,60 @@ public abstract class RelationalOperator
    * Applies the operator to the given String values
    **/
   public abstract boolean apply (String pLeft,
-				 String pRight,
-				 Logger pLogger);
+				 String pRight
+                                 );
 
   //-------------------------------------
+
+
+    /**
+     * Applies the operator to the given BigDecimal values, returning a BigDecimal
+     **/
+    public abstract boolean apply(BigDecimal pLeft, BigDecimal pRight);
+
+    //-------------------------------------
+
+    /**
+     * Applies the operator to the given BigDecimal values, returning a BigDecimal
+     **/
+    public abstract boolean apply(BigInteger pLeft, BigInteger pRight);
+
+    //-------------------------------------
+
+
+    /**
+     * Test return value of BigInteger/BigDecimal A.compareTo(B).
+     * @param val - result of BigInteger/BigDecimal compareTo() call
+     * @return - true if result is less than 0, otherwise false
+     */
+    protected boolean isLess(int val) {
+        if (val < 0)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Test return value of BigInteger/BigDecimal A.compareTo(B).
+     * @param val - result of BigInteger/BigDecimal compareTo() call
+     * @return - true if result is equal to 0, otherwise false
+     */
+    protected boolean isEqual(int val) {
+        if (val == 0)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Test return value of BigInteger/BigDecimal A.compareTo(B).
+     * @param val - result of BigInteger/BigDecimal compareTo() call
+     * @return - true if result is greater than 0, otherwise false
+     */
+    protected boolean isGreater(int val) {
+        if (val > 0)
+            return true;
+        else
+            return false;
+    }
 }

@@ -55,6 +55,9 @@
 
 package org.apache.commons.el;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 /**
  *
  * <p>The implementation of the minus operator
@@ -89,8 +92,7 @@ public class MinusOperator
    *
    * Returns the symbol representing the operator
    **/
-  public String getOperatorSymbol ()
-  {
+  public String getOperatorSymbol () {
     return "-";
   }
 
@@ -99,10 +101,7 @@ public class MinusOperator
    *
    * Applies the operator to the given double values, returning a double
    **/
-  public double apply (double pLeft,
-		       double pRight,
-		       Logger pLogger)
-  {
+  public double apply (double pLeft, double pRight) {
     return pLeft - pRight;
   }
   
@@ -111,12 +110,29 @@ public class MinusOperator
    *
    * Applies the operator to the given double values, returning a double
    **/
-  public long apply (long pLeft,
-		     long pRight,
-		     Logger pLogger)
-  {
+  public long apply (long pLeft, long pRight) {
     return pLeft - pRight;
   }
   
   //-------------------------------------
+
+    /**
+     *
+     * Applies the operator to the given BigDecimal values, returning a BigDecimal
+     **/
+    public BigDecimal apply(BigDecimal pLeft, BigDecimal pRight) {
+        return pLeft.subtract(pRight);
+    }
+
+    //-------------------------------------
+
+    /**
+     *
+     * Applies the operator to the given BigInteger values, returning a BigInteger
+     **/
+    public BigInteger apply(BigInteger pLeft, BigInteger pRight) {
+        return pLeft.subtract(pRight);
+    }
+
+    //-------------------------------------
 }

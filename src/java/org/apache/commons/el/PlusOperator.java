@@ -55,6 +55,10 @@
 
 package org.apache.commons.el;
 
+import javax.servlet.jsp.el.ELException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 /**
  *
  * <p>The implementation of the plus operator
@@ -89,8 +93,7 @@ public class PlusOperator
    *
    * Returns the symbol representing the operator
    **/
-  public String getOperatorSymbol ()
-  {
+  public String getOperatorSymbol () {
     return "+";
   }
 
@@ -99,10 +102,7 @@ public class PlusOperator
    *
    * Applies the operator to the given double values, returning a double
    **/
-  public double apply (double pLeft,
-		       double pRight,
-		       Logger pLogger)
-  {
+  public double apply (double pLeft, double pRight) {
     return pLeft + pRight;
   }
   
@@ -111,12 +111,29 @@ public class PlusOperator
    *
    * Applies the operator to the given double values, returning a double
    **/
-  public long apply (long pLeft,
-		     long pRight,
-		     Logger pLogger)
-  {
+  public long apply (long pLeft, long pRight) {
     return pLeft + pRight;
   }
   
   //-------------------------------------
+
+    /**
+     *
+     * Applies the operator to the given BigDecimal values, returning a BigDecimal
+     **/
+    public BigDecimal apply(BigDecimal pLeft, BigDecimal pRight) {
+        return pLeft.add(pRight);
+    }
+
+    //-------------------------------------
+
+    /**
+     *
+     * Applies the operator to the given BigDecimal values, returning a BigDecimal
+     **/
+    public BigInteger apply(BigInteger pLeft, BigInteger pRight) {
+        return pLeft.add(pRight);
+    }
+
+    //-------------------------------------
 }

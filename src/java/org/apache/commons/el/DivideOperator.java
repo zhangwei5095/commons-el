@@ -56,6 +56,7 @@
 package org.apache.commons.el;
 
 import javax.servlet.jsp.el.ELException;
+import java.math.BigDecimal;
 
 /**
  *
@@ -116,25 +117,49 @@ public class DivideOperator
       return PrimitiveObjects.getInteger (0);
     }
 
-    double left =
-      Coercions.coerceToPrimitiveNumber (pLeft, Double.class, pLogger).
-      doubleValue ();
-    double right =
-      Coercions.coerceToPrimitiveNumber (pRight, Double.class, pLogger).
-      doubleValue ();
+    if (Coercions.isBigDecimal(pLeft) ||
+        Coercions.isBigInteger(pLeft) ||
+        Coercions.isBigDecimal(pRight) ||
+        Coercions.isBigInteger(pRight)) {
 
-    try {
-      return PrimitiveObjects.getDouble (left / right);
-    }
-    catch (Exception exc) {
-      if (pLogger.isLoggingError ()) {
-	pLogger.logError
-	  (Constants.ARITH_ERROR,
-	   getOperatorSymbol (),
-	   "" + left,
-	   "" + right);
-      }
-      return PrimitiveObjects.getInteger (0);
+        BigDecimal left = (BigDecimal)
+            Coercions.coerceToPrimitiveNumber(pLeft, BigDecimal.class, pLogger);
+        BigDecimal right = (BigDecimal)
+            Coercions.coerceToPrimitiveNumber(pRight, BigDecimal.class, pLogger);
+
+        try {
+            return left.divide(right, BigDecimal.ROUND_HALF_UP);
+        } catch (Exception exc) {
+            if (pLogger.isLoggingError()) {
+                pLogger.logError
+                    (Constants.ARITH_ERROR,
+                        getOperatorSymbol(),
+                        "" + left,
+                        "" + right);
+            }
+            return PrimitiveObjects.getInteger(0);
+        }
+    } else {
+
+        double left =
+            Coercions.coerceToPrimitiveNumber(pLeft, Double.class, pLogger).
+            doubleValue();
+        double right =
+            Coercions.coerceToPrimitiveNumber(pRight, Double.class, pLogger).
+            doubleValue();
+
+        try {
+            return PrimitiveObjects.getDouble(left / right);
+        } catch (Exception exc) {
+            if (pLogger.isLoggingError()) {
+                pLogger.logError
+                    (Constants.ARITH_ERROR,
+                        getOperatorSymbol(),
+                        "" + left,
+                        "" + right);
+            }
+            return PrimitiveObjects.getInteger(0);
+        }
     }
   }
 

@@ -56,6 +56,8 @@
 package org.apache.commons.el;
 
 import javax.servlet.jsp.el.ELException;
+import java.math.BigInteger;
+import java.math.BigDecimal;
 
 /**
  *
@@ -114,6 +116,14 @@ public class UnaryMinusOperator
       }
       */
       return PrimitiveObjects.getInteger (0);
+    }
+
+    else if (pValue instanceof BigInteger) {
+        return ((BigInteger) pValue).negate();
+    }
+
+    else if (pValue instanceof BigDecimal) {
+        return ((BigDecimal) pValue).negate();
     }
 
     else if (pValue instanceof String) {
