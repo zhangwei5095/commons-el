@@ -18,16 +18,16 @@
 
 <!--
         "Expression Language" component of the Jakarta Commons Subproject
-        $Id: build.xml,v 1.10 2004/02/27 23:17:53 scolebourne Exp $
+        $Id: build.xml,v 1.11 2004/07/05 21:01:14 craigmcc Exp $
 -->
 
 
 <!-- ========== Initialize Properties ===================================== -->
 
 
-  <property file="${user.home}/build.properties"/>   <!-- User local        -->
   <property file="build.properties"/>                <!-- Component local   -->
   <property file="../build.properties"/>             <!-- Commons local     -->
+  <property file="${user.home}/build.properties"/>   <!-- User local        -->
 
 
 <!-- ========== External Dependencies ===================================== -->
@@ -35,7 +35,7 @@
 
   <!-- The home directory for the Servlet 2.4 and JSP 2.0 classes
        distribution -->
-  <property name="api.home" value="../jakarta-servletapi-5"/>
+  <property name="api.home" value="../../jakarta-servletapi-5"/>
 
   <!-- The directory containing your binary distribution of JUnit,
        version 3.7 or later -->
@@ -85,7 +85,6 @@
   <!-- The base directory for unit test sources -->
   <property name="test.home"               value="src/test"/>
 
-  <property name="commons-el.jar" value="${dist.home}/commons-${component.name}.jar" />
 
 <!-- ========== Compiler Defaults ========================================= -->
 
@@ -104,7 +103,7 @@
     <pathelement location="${build.home}/classes"/>
     <pathelement location="${servlet-api.jar}"/>
     <pathelement location="${jsp-api.jar}"/>
-    <pathelement location="${commons.logging.jar}"/>
+    <pathelement location="${commons-logging.jar}"/>
   </path>
 
 
@@ -264,7 +263,7 @@
              tofile="${build.home}/classes/META-INF/LICENSE.txt"/>
     <copy      file="NOTICE.txt"
              tofile="${build.home}/classes/META-INF/NOTICE.txt"/>
-    <jar    jarfile="${commons-el.jar}"
+    <jar    jarfile="${dist.home}/commons-${component.name}.jar"
            manifest="${build.home}/conf/MANIFEST.MF">
      <fileset dir="${build.home}/classes" includes="org/apache/commons/el/**" />
      <fileset dir="${build.home}/classes" includes="META-INF/LICENSE.txt" />
@@ -281,7 +280,7 @@
              tofile="${build.home}/classes/META-INF/LICENSE.txt"/>
     <copy      file="NOTICE.txt"
              tofile="${build.home}/classes/META-INF/NOTICE.txt"/>
-    <jar    jarfile="${commons-el.jar}"
+    <jar    jarfile="${dist.home}/commons-${component.name}.jar"
            manifest="${build.home}/classes/META-INF/MANIFEST.MF">
      <fileset dir="${build.home}/classes" includes="org/apache/commons/el/**" />
      <fileset dir="${build.home}/classes" includes="META-INF/LICENSE.txt" />
