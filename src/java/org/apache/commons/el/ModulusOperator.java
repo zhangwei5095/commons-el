@@ -144,12 +144,13 @@ public class ModulusOperator
       }
       catch (Exception exc) {
           if (log.isErrorEnabled()) {
-              log.error(
-                  MessageUtil.getMessageWithArgs(
-                      Constants.ARITH_ERROR,
-                      getOperatorSymbol(),
-                      "" + left,
-                      "" + right));
+              String message = MessageUtil.getMessageWithArgs(
+                  Constants.ARITH_ERROR,
+                  getOperatorSymbol(),
+                  "" + left,
+                  "" + right);
+              log.error(message);
+              throw new ELException(message);
           }	
 	return PrimitiveObjects.getInteger (0);
       }
@@ -164,12 +165,13 @@ public class ModulusOperator
             return left.remainder(right);
         } catch (Exception exc) {
             if (log.isErrorEnabled()) {
-                log.error(
-                    MessageUtil.getMessageWithArgs(
-                        Constants.ARITH_ERROR,
-                        getOperatorSymbol(),
-                        "" + left,
-                        "" + right));
+                String message = MessageUtil.getMessageWithArgs(
+                    Constants.ARITH_ERROR,
+                    getOperatorSymbol(),
+                    "" + left,
+                    "" + right);
+                log.error(message);
+                throw new ELException(message);
             }	           
             return PrimitiveObjects.getInteger(0);
         }
@@ -187,12 +189,13 @@ public class ModulusOperator
       }
       catch (Exception exc) {
           if (log.isErrorEnabled()) {
-              log.error(
-                  MessageUtil.getMessageWithArgs(
-                      Constants.ARITH_ERROR,
-                      getOperatorSymbol(),
-                      "" + left,
-                      "" + right));
+              String message = MessageUtil.getMessageWithArgs(
+                  Constants.ARITH_ERROR,
+                  getOperatorSymbol(),
+                  "" + left,
+                  "" + right);
+              log.error(message);
+              throw new ELException(message);
           }		
 	return PrimitiveObjects.getInteger (0);
       }

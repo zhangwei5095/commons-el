@@ -224,33 +224,64 @@ public class ArraySuffix
             Integer indexObj = Coercions.coerceToInteger(indexVal);
             if (indexObj == null) {
                 if (log.isErrorEnabled()) {
-                    log.error(
-                        MessageUtil.getMessageWithArgs(
-                            Constants.BAD_INDEX_VALUE,
-                            getOperatorSymbol(), indexVal.getClass().getName()));
+                    String message = MessageUtil.getMessageWithArgs(
+                        Constants.BAD_INDEX_VALUE,
+                        getOperatorSymbol(), indexVal.getClass().getName());
+                    log.error(message);
+                    throw new ELException(message);
                 }
                 return null;
             } else if (pValue instanceof List) {
                 try {
                     return ((List) pValue).get(indexObj.intValue());
-                } catch (Throwable t) {
+                } catch (ArrayIndexOutOfBoundsException aob) {
                     if (log.isWarnEnabled()) {
                         log.warn(
                             MessageUtil.getMessageWithArgs(
-                                Constants.EXCEPTION_ACCESSING_LIST,
-                                indexObj), t);
+                                Constants.EXCEPTION_ACCESSING_LIST, indexObj), aob);
+                    }   
+                    return null;
+                } catch (IndexOutOfBoundsException iob) {
+                    if (log.isWarnEnabled()) {
+                        log.warn(
+                            MessageUtil.getMessageWithArgs(
+                                Constants.EXCEPTION_ACCESSING_LIST, indexObj), iob);                        
+                    }   
+                    return null;
+                } catch (Throwable t) {
+                    if (log.isErrorEnabled()) {
+                        String message = MessageUtil.getMessageWithArgs(
+                            Constants.EXCEPTION_ACCESSING_LIST,
+                            indexObj);
+                        log.error(message, t);
+                        throw new ELException(message, t);
                     }
                     return null;
                 }
-
             } else {
                 try {
                     return Array.get(pValue, indexObj.intValue());
-                } catch (Throwable t) {
+                } catch (ArrayIndexOutOfBoundsException aob) {
                     if (log.isWarnEnabled()) {
                         log.warn(
                             MessageUtil.getMessageWithArgs(
-                                Constants.EXCEPTION_ACCESSING_ARRAY, indexObj), t);
+                                Constants.EXCEPTION_ACCESSING_ARRAY, indexObj), aob);
+                    }
+                    return null;
+                } catch (IndexOutOfBoundsException iob) {
+                    if (log.isWarnEnabled()) {
+                        log.warn(
+                            MessageUtil.getMessageWithArgs(
+                                Constants.EXCEPTION_ACCESSING_ARRAY, indexObj), iob);
+                    }
+                    return null;
+                } catch (Throwable t) {
+                    if (log.isErrorEnabled()) {
+                        String message = MessageUtil.getMessageWithArgs(
+                            Constants.EXCEPTION_ACCESSING_ARRAY,
+                            indexObj);
+                        log.error(message, t);
+                        throw new ELException(message, t);
                     }
                     return null;
                 }
@@ -271,33 +302,32 @@ public class ArraySuffix
             try {
                 return property.getReadMethod().invoke(pValue, sNoArgs);
             } catch (InvocationTargetException exc) {
-                if (log.isWarnEnabled()) {
-                    log.warn(
-                        MessageUtil.getMessageWithArgs(
-                            Constants.ERROR_GETTING_PROPERTY, indexStr, pValue.getClass().getName()),
-                        exc.getTargetException()
-                    );
+                if (log.isErrorEnabled()) {
+                    String message = MessageUtil.getMessageWithArgs(
+                        Constants.ERROR_GETTING_PROPERTY, indexStr, pValue.getClass().getName());
+                    Throwable t = exc.getTargetException();
+                    log.warn(message, t);
+                    throw new ELException(message, t);
                 }
                 return null;
-            } catch (Exception exc) {
-                if (log.isWarnEnabled()) {
-                    log.warn(
-                        MessageUtil.getMessageWithArgs(
-                            Constants.ERROR_GETTING_PROPERTY, indexStr, pValue.getClass().getName()),
-                        exc
-                    );
+            } catch (Throwable t) {
+                if (log.isErrorEnabled()) {
+                    String message = MessageUtil.getMessageWithArgs(
+                        Constants.ERROR_GETTING_PROPERTY, indexStr, pValue.getClass().getName());                    
+                    log.warn(message, t);
+                    throw new ELException(message, t);
                 }
                 return null;
             }
         } else {
-            if (log.isWarnEnabled()) {
-                log.warn(
-                    MessageUtil.getMessageWithArgs(
-                        Constants.CANT_FIND_INDEX, 
-                        indexVal, 
-                        pValue.getClass().getName(), 
-                        getOperatorSymbol())
-                    );
+            if (log.isErrorEnabled()) {
+                String message = MessageUtil.getMessageWithArgs(
+                    Constants.CANT_FIND_INDEX,
+                    indexVal,
+                    pValue.getClass().getName(),
+                    getOperatorSymbol());
+                log.error(message);
+                throw new ELException(message);                    
             }
             return null;          
         }

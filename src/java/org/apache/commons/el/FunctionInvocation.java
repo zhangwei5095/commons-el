@@ -138,9 +138,10 @@ public class FunctionInvocation
     // if the Map is null, then the function is invalid
     if (functions == null) {
         if (log.isErrorEnabled()) {
-            log.error(
-                MessageUtil.getMessageWithArgs(
-                    Constants.UNKNOWN_FUNCTION, functionName));
+            String message = MessageUtil.getMessageWithArgs(
+                Constants.UNKNOWN_FUNCTION, functionName);
+            log.error(message);
+            throw new ELException(message);
         }
     }            
 
@@ -160,9 +161,10 @@ public class FunctionInvocation
     Method target = (Method) functions.resolveFunction(prefix, localName);
     if (target == null) {
         if (log.isErrorEnabled()) {
-            log.error(
-                MessageUtil.getMessageWithArgs(
-                    Constants.UNKNOWN_FUNCTION, functionName));
+            String message = MessageUtil.getMessageWithArgs(
+                Constants.UNKNOWN_FUNCTION, functionName);
+            log.error(message);
+            throw new ELException(message);
         }
     }      
 
@@ -170,11 +172,12 @@ public class FunctionInvocation
     Class[] params = target.getParameterTypes();
     if (params.length != argumentList.size()) {
         if (log.isErrorEnabled()) {
-            log.error(
-                MessageUtil.getMessageWithArgs(
-                    Constants.INAPPROPRIATE_FUNCTION_ARG_COUNT,
-                    functionName, new Integer(params.length),
-                    new Integer(argumentList.size())));
+            String message = MessageUtil.getMessageWithArgs(
+                Constants.INAPPROPRIATE_FUNCTION_ARG_COUNT,
+                functionName, new Integer(params.length),
+                new Integer(argumentList.size()));
+            log.error(message);
+            throw new ELException(message);
         }      
     }
 
@@ -193,18 +196,21 @@ public class FunctionInvocation
       return (target.invoke(null, arguments));
     } catch (InvocationTargetException ex) {
         if (log.isErrorEnabled()) {
-            log.error(
-                MessageUtil.getMessageWithArgs(
-                    Constants.FUNCTION_INVOCATION_ERROR,
-                    functionName), ex.getTargetException());
+            String message = MessageUtil.getMessageWithArgs(
+                Constants.FUNCTION_INVOCATION_ERROR,
+                functionName);
+            Throwable t = ex.getTargetException();
+            log.error(message, t);
+            throw new ELException(message, t);
         }      
       return null;
-    } catch (Exception ex) {
+    } catch (Throwable t) {
         if (log.isErrorEnabled()) {
-            log.error(
-                MessageUtil.getMessageWithArgs(
-                    Constants.FUNCTION_INVOCATION_ERROR,
-                    functionName), ex);    
+            String message = MessageUtil.getMessageWithArgs(
+                Constants.FUNCTION_INVOCATION_ERROR,
+                functionName);            
+            log.error(message, t);
+            throw new ELException(message, t); 
         }      
       return null;
     }

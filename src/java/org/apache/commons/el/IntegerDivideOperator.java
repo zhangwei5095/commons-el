@@ -135,12 +135,12 @@ public class IntegerDivideOperator
     }
     catch (Exception exc) {
         if (log.isErrorEnabled()) {
-            log.error(
-                MessageUtil.getMessageWithArgs(
-                    Constants.ARITH_ERROR,
-                    getOperatorSymbol(),
-                    "" + left,
-                    "" + right));
+            String message = MessageUtil.getMessageWithArgs(
+                Constants.ARITH_ERROR,
+                getOperatorSymbol(),
+                "" + left,
+                "" + right);
+            log.error(message);
         }    
       return PrimitiveObjects.getInteger (0);
     }

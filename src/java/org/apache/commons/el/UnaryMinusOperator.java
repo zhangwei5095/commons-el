@@ -174,11 +174,12 @@ public class UnaryMinusOperator
 
     else {
         if (log.isErrorEnabled()) {
-            log.error(
-                MessageUtil.getMessageWithArgs(
-                    Constants.UNARY_OP_BAD_TYPE,
-                    getOperatorSymbol(),
-                    pValue.getClass().getName()));
+            String message = MessageUtil.getMessageWithArgs(
+                Constants.UNARY_OP_BAD_TYPE,
+                getOperatorSymbol(),
+                pValue.getClass().getName());
+            log.error(message);
+            throw new ELException(message);
         }     
       return PrimitiveObjects.getInteger (0);
     }

@@ -433,7 +433,7 @@ public class ExpressionEvaluatorImpl
   {
     StringBuffer retval = new StringBuffer ();
     char ch;
-    for (int i = 0; i < str.length (); i++) {
+    for (int i = 0, length = str.length(); i < length; i++) {
       switch (str.charAt (i)) {
 	case 0 :
 	  continue;

@@ -1889,7 +1889,7 @@ public class ELParser implements ELParserConstants {
     jj_rescan_token();
     jj_add_error_token(0, 0);
     int[][] exptokseq = new int[jj_expentries.size()][];
-    for (int i = 0; i < jj_expentries.size(); i++) {
+    for (int i = 0, size = jj_expentries.size(); i < size; i++) {
       exptokseq[i] = (int[])jj_expentries.elementAt(i);
     }
     return new ParseException(token, exptokseq, tokenImage);

@@ -394,11 +394,13 @@ public class Coercions
       try {
 	return pValue.toString ();
       }
-      catch (Exception exc) {
+      catch (Exception exc) {          
           if (log.isErrorEnabled()) {
-              log.error(
-                  MessageUtil.getMessageWithArgs(Constants.TOSTRING_EXCEPTION, 
-                                                 pValue.getClass().getName()), exc);
+              String message = MessageUtil.getMessageWithArgs(
+                  Constants.TOSTRING_EXCEPTION,
+                  pValue.getClass().getName());
+              log.error(message, exc);
+              throw new ELException(exc);
           }
           return "";	
       }
@@ -424,9 +426,10 @@ public class Coercions
     }
     else if (pValue instanceof Boolean) {
         if (log.isErrorEnabled()) {
-            log.error(
-                MessageUtil.getMessageWithArgs(
-                    Constants.BOOLEAN_TO_NUMBER, pValue, pClass.getName()));
+            String message = MessageUtil.getMessageWithArgs(
+                Constants.BOOLEAN_TO_NUMBER, pValue, pClass.getName());
+            log.error(message);
+            throw new ELException(message);
         }
         return coerceToPrimitiveNumber(ZERO, pClass);     
     }
@@ -442,21 +445,23 @@ public class Coercions
       }
       catch (Exception exc) {
           if (log.isErrorEnabled()) {
-              log.error(
-                  MessageUtil.getMessageWithArgs(
-                      Constants.STRING_TO_NUMBER_EXCEPTION, 
-                      (String) pValue, pClass.getName()));
+              String message = MessageUtil.getMessageWithArgs(
+                  Constants.STRING_TO_NUMBER_EXCEPTION,
+                  (String) pValue, pClass.getName());
+              log.error(message);
+              throw new ELException(message);
           }	
 	    return coerceToPrimitiveNumber (ZERO, pClass);
       }
     }
     else {
         if (log.isErrorEnabled()) {
-            log.error(
-                MessageUtil.getMessageWithArgs(
-                    Constants.COERCE_TO_NUMBER,
-                    pValue.getClass().getName(),
-                    pClass.getName()));
+            String message = MessageUtil.getMessageWithArgs(
+                Constants.COERCE_TO_NUMBER,
+                pValue.getClass().getName(),
+                pClass.getName());
+            log.error(message);
+            throw new ELException(message);
         }      
       return coerceToPrimitiveNumber (0, pClass);
     }
@@ -479,8 +484,8 @@ public class Coercions
 	((int) (((Character) pValue).charValue ()));
     }
     else if (pValue instanceof Boolean) {
-        if (log.isErrorEnabled()) {
-            log.error(
+        if (log.isWarnEnabled()) {
+            log.warn(
                 MessageUtil.getMessageWithArgs(
                     Constants.BOOLEAN_TO_NUMBER, pValue, Integer.class.getName()));            
         }     
@@ -498,8 +503,8 @@ public class Coercions
 	return Integer.valueOf ((String) pValue);
       }
       catch (Exception exc) {
-          if (log.isErrorEnabled()) {
-              log.error(
+          if (log.isWarnEnabled()) {
+              log.warn(
                   MessageUtil.getMessageWithArgs(
                       Constants.STRING_TO_NUMBER_EXCEPTION,
                       (String) pValue,
@@ -681,9 +686,10 @@ public class Coercions
     }
     else if (pValue instanceof Boolean) {
         if (log.isErrorEnabled()) {
-            log.error(
-                MessageUtil.getMessageWithArgs(
-                    Constants.BOOLEAN_TO_CHARACTER, pValue));
+            String message = MessageUtil.getMessageWithArgs(
+                Constants.BOOLEAN_TO_CHARACTER, pValue);
+            log.error(message);
+            throw new ELException(message);
         }     
       return PrimitiveObjects.getCharacter ((char) 0);
     }
@@ -697,10 +703,11 @@ public class Coercions
     }
     else {
         if (log.isErrorEnabled()) {
-            log.error(
-                MessageUtil.getMessageWithArgs(
-                    Constants.COERCE_TO_CHARACTER,
-                    pValue.getClass().getName()));
+            String message = MessageUtil.getMessageWithArgs(
+                Constants.COERCE_TO_CHARACTER,
+                pValue.getClass().getName());
+            log.error(message);
+            throw new ELException(message);
         }     
       return PrimitiveObjects.getCharacter ((char) 0);
     }
@@ -728,19 +735,21 @@ public class Coercions
       }
       catch (Exception exc) {
           if (log.isErrorEnabled()) {
-              log.error(
-                  MessageUtil.getMessageWithArgs(
-                      Constants.STRING_TO_BOOLEAN, (String) pValue), exc);
+              String message = MessageUtil.getMessageWithArgs(
+                  Constants.STRING_TO_BOOLEAN, (String) pValue);
+              log.error(message, exc);
+              throw new ELException(message, exc);
           }	
 	return Boolean.FALSE;
       }
     }
     else {
         if (log.isErrorEnabled()) {
-            log.error(
-                MessageUtil.getMessageWithArgs(
-                    Constants.COERCE_TO_BOOLEAN,
-                    pValue.getClass().getName()));
+            String message = MessageUtil.getMessageWithArgs(
+                Constants.COERCE_TO_BOOLEAN,
+                pValue.getClass().getName());
+            log.error(message);
+            throw new ELException(message);
         }     
       return Boolean.TRUE;
     }
@@ -770,10 +779,11 @@ public class Coercions
 	}
 	else {
         if (log.isErrorEnabled()) {
-            log.error(
-                MessageUtil.getMessageWithArgs(
-                    Constants.NO_PROPERTY_EDITOR,
-                    str, pClass.getName()));            
+            String message = MessageUtil.getMessageWithArgs(
+                Constants.NO_PROPERTY_EDITOR,
+                str, pClass.getName());
+            log.error(message);
+            throw new ELException(message);
         }	  
 	  return null;
 	}
@@ -788,11 +798,12 @@ public class Coercions
 	}
 	else {
         if (log.isErrorEnabled()) {
-            log.error(
-                MessageUtil.getMessageWithArgs(
-                    Constants.PROPERTY_EDITOR_ERROR,
-                    pValue,
-                    pClass.getName()), exc);
+            String message = MessageUtil.getMessageWithArgs(
+                Constants.PROPERTY_EDITOR_ERROR,
+                pValue,
+                pClass.getName());
+            log.error(message, exc);
+            throw new ELException(message, exc);
         }	  
 	  return null;
 	}
@@ -800,11 +811,12 @@ public class Coercions
     }
     else {
         if (log.isErrorEnabled()) {
-            log.error(
-                MessageUtil.getMessageWithArgs(
-                    Constants.COERCE_TO_OBJECT,
-                    pValue.getClass().getName(),
-                    pClass.getName()));
+            String message = MessageUtil.getMessageWithArgs(
+                Constants.COERCE_TO_OBJECT,
+                pValue.getClass().getName(),
+                pClass.getName());
+            log.error(message);
+            throw new ELException(message);
         }     
       return null;
     }
@@ -954,12 +966,13 @@ public class Coercions
       }
       catch (Exception exc) {
           if (log.isErrorEnabled()) {
-              log.error(
-                  MessageUtil.getMessageWithArgs(
-                      Constants.COMPARABLE_ERROR,
-                      pLeft.getClass().getName(),
-                      (pRight == null) ? "null" : pRight.getClass().getName(),
-                      pOperator.getOperatorSymbol()), exc);
+              String message = MessageUtil.getMessageWithArgs(
+                  Constants.COMPARABLE_ERROR,
+                  pLeft.getClass().getName(),
+                  (pRight == null) ? "null" : pRight.getClass().getName(),
+                  pOperator.getOperatorSymbol());
+              log.error(message, exc);
+              throw new ELException(message, exc);
           }	
 	return Boolean.FALSE;
       }
@@ -974,12 +987,13 @@ public class Coercions
       }
       catch (Exception exc) {
           if (log.isErrorEnabled()) {
-              log.error(
-                  MessageUtil.getMessageWithArgs(
-                      Constants.COMPARABLE_ERROR,
-                      pRight.getClass().getName(),
-                      (pLeft == null) ? "null" : pLeft.getClass().getName(),
-                      pOperator.getOperatorSymbol()), exc);
+              String message = MessageUtil.getMessageWithArgs(
+                  Constants.COMPARABLE_ERROR,
+                  pRight.getClass().getName(),
+                  (pLeft == null) ? "null" : pLeft.getClass().getName(),
+                  pOperator.getOperatorSymbol());
+              log.error(message, exc);
+              throw new ELException(message, exc);
           }		
 	return Boolean.FALSE;
       }
@@ -987,12 +1001,13 @@ public class Coercions
 
     else {
         if (log.isErrorEnabled()) {
-            log.error(
-                MessageUtil.getMessageWithArgs(
-                    Constants.ARITH_OP_BAD_TYPE,
-                    pOperator.getOperatorSymbol(),
-                    pLeft.getClass().getName(),
-                    pRight.getClass().getName()));
+            String message = MessageUtil.getMessageWithArgs(
+                Constants.ARITH_OP_BAD_TYPE,
+                pOperator.getOperatorSymbol(),
+                pLeft.getClass().getName(),
+                pRight.getClass().getName());
+            log.error(message);
+            throw new ELException(message);
         }     
       return Boolean.FALSE;
     }
@@ -1087,12 +1102,13 @@ public class Coercions
       }
       catch (Exception exc) {
           if (log.isErrorEnabled()) {
-              log.error(
-                  MessageUtil.getMessageWithArgs(
-                      Constants.ERROR_IN_EQUALS,
-                      pLeft.getClass().getName(),
-                      pRight.getClass().getName(),
-                      pOperator.getOperatorSymbol()), exc);
+              String message = MessageUtil.getMessageWithArgs(
+                  Constants.ERROR_IN_EQUALS,
+                  pLeft.getClass().getName(),
+                  pRight.getClass().getName(),
+                  pOperator.getOperatorSymbol());
+              log.error(message, exc);
+              throw new ELException(message, exc);
           }	
 	return Boolean.FALSE;
       }

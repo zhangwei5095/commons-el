@@ -128,7 +128,7 @@ public class BinaryOperatorExpression
     StringBuffer buf = new StringBuffer ();
     buf.append ("(");
     buf.append (mExpression.getExpressionString ());
-    for (int i = 0; i < mOperators.size (); i++) {
+    for (int i = 0, size = mOperators.size(); i < size; i++) {
       BinaryOperator operator = (BinaryOperator) mOperators.get (i);
       Expression expression = (Expression) mExpressions.get (i);
       buf.append (" ");
@@ -151,7 +151,7 @@ public class BinaryOperatorExpression
     throws ELException
   {
     Object value = mExpression.evaluate (pResolver, functions);
-    for (int i = 0; i < mOperators.size (); i++) {
+    for (int i = 0, size = mOperators.size(); i < size; i++) {
       BinaryOperator operator = (BinaryOperator) mOperators.get (i);
 
       // For the And/Or operators, we need to coerce to a boolean

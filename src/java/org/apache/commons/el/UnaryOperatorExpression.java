@@ -132,7 +132,7 @@ public class UnaryOperatorExpression
       buf.append (" ");
     }
     else {
-      for (int i = 0; i < mOperators.size (); i++) {
+      for (int i = 0, size = mOperators.size(); i < size; i++) {
 	UnaryOperator operator = (UnaryOperator) mOperators.get (i);
 	buf.append (operator.getOperatorSymbol ());
 	buf.append (" ");
