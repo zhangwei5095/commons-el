@@ -3,16 +3,16 @@
 
 <!--
         "Expression Language" component of the Jakarta Commons Subproject
-        $Id: build.xml,v 1.1 2003/02/04 00:22:24 luehe Exp $
+        $Id: build.xml,v 1.6 2003/06/06 22:35:28 luehe Exp $
 -->
 
 
 <!-- ========== Initialize Properties ===================================== -->
 
 
+  <property file="${user.home}/build.properties"/>   <!-- User local        -->
   <property file="build.properties"/>                <!-- Component local   -->
   <property file="../build.properties"/>             <!-- Commons local     -->
-  <property file="${user.home}/build.properties"/>   <!-- User local        -->
 
 
 <!-- ========== External Dependencies ===================================== -->
@@ -70,6 +70,7 @@
   <!-- The base directory for unit test sources -->
   <property name="test.home"               value="src/test"/>
 
+  <property name="commons-el.jar" value="${dist.home}/commons-${component.name}.jar" />
 
 <!-- ========== Compiler Defaults ========================================= -->
 
@@ -151,8 +152,22 @@
   </target>
 
 
-  <target name="compile" depends="static"
-   description="Compile shareable components">
+  <target name="build-servletapi" unless="servletapi.build.notrequired" >
+    <echo>========== Building: ${servlet-api.jar}</echo>
+    <ant dir="${api.home}/jsr154" target="jar"/>
+  </target>
+
+
+  <target name="build-jspapi" unless="jspapi.build.notrequired" >
+    <echo>========== Building: ${jsp-api.jar}</echo>
+    <ant dir="${api.home}/jsr152" target="jar"/>
+  </target>
+
+
+  <target name="compile" depends="static,build-servletapi,build-jspapi,compile-only"
+   description="Compile shareable components"/>
+
+  <target name="compile-only" >
     <javac  srcdir="${source.home}"
            destdir="${build.home}/classes"
              debug="${compile.debug}"
@@ -217,10 +232,8 @@
     <mkdir      dir="${dist.home}"/>
     <copy      file="../LICENSE"
               todir="${dist.home}"/>
-<!-- Comment out for separate commons-el build
     <copy      file="RELEASE-NOTES.txt"
               todir="${dist.home}"/>
--->
     <antcall target="jar"/>
   </target>
 
@@ -231,11 +244,28 @@
     <mkdir      dir="${build.home}/classes/META-INF"/>
     <copy      file="../LICENSE"
              tofile="${build.home}/classes/META-INF/LICENSE.txt"/>
-    <jar    jarfile="${dist.home}/commons-${component.name}.jar"
-            basedir="${build.home}/classes"
-           manifest="${build.home}/conf/MANIFEST.MF"/>
+    <jar    jarfile="${commons-el.jar}"
+           manifest="${build.home}/conf/MANIFEST.MF">
+     <fileset dir="${build.home}/classes" includes="org/apache/commons/el/**" />
+     <fileset dir="${build.home}/classes" includes="META-INF/LICENSE.txt" />
+    </jar>
   </target>
 
+  <target name="jar-only" depends="init,compile-only" >
+    <mkdir      dir="${build.home}/classes/META-INF"/>
+    <tstamp/>
+    <copy  todir="${build.home}/classes/META-INF" filtering="on">
+      <fileset dir="${conf.home}" includes="*.MF"/>
+    </copy>
+    <copy      file="../LICENSE"
+             tofile="${build.home}/classes/META-INF/LICENSE.txt"/>
+    <jar    jarfile="${commons-el.jar}"
+           manifest="${build.home}/classes/META-INF/MANIFEST.MF">
+     <fileset dir="${build.home}/classes" includes="org/apache/commons/el/**" />
+     <fileset dir="${build.home}/classes" includes="META-INF/LICENSE.txt" />
+    </jar>  
+
+  </target>
 
   <target name="install-jar" depends="jar"
    description="--> Installs jar file in ${lib.repo}">

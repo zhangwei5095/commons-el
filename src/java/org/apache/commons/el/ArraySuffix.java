@@ -146,12 +146,10 @@ public class ArraySuffix
    **/
   Object evaluateIndex (VariableResolver pResolver,
 			FunctionMapper functions,
-			String defaultPrefix,
 			Logger pLogger)
     throws ELException
   {
-    return mIndex.evaluate (pResolver, functions, defaultPrefix,
-			    pLogger);
+    return mIndex.evaluate (pResolver, functions, pLogger);
   }
 
   //-------------------------------------
@@ -185,7 +183,6 @@ public class ArraySuffix
   public Object evaluate (Object pValue,
 			  VariableResolver pResolver,
 			  FunctionMapper functions,
-			  String defaultPrefix,
 			  Logger pLogger)
     throws ELException
   {
@@ -205,8 +202,8 @@ public class ArraySuffix
     }
 
     // Evaluate the index
-    else if ((indexVal = evaluateIndex (pResolver, functions, defaultPrefix,
-					pLogger)) == null) {
+    else if ((indexVal = evaluateIndex (pResolver, functions, pLogger))
+								== null) {
       if (pLogger.isLoggingWarning ()) {
 	pLogger.logWarning
 	  (Constants.CANT_GET_NULL_INDEX,

@@ -124,7 +124,6 @@ public class FunctionInvocation
    **/
   public Object evaluate (VariableResolver pResolver,
 			  FunctionMapper functions,
-			  String defaultPrefix,
                           Logger pLogger)
     throws ELException
   {
@@ -133,14 +132,12 @@ public class FunctionInvocation
     if (functions == null)
       pLogger.logError(Constants.UNKNOWN_FUNCTION, functionName);
 
-    // normalize function name against default prefix
+    // normalize function name
     String prefix = null;
     String localName = null;
     int index = functionName.indexOf( ':' );
     if (index == -1) {
-      if (defaultPrefix == null)
-        pLogger.logError(Constants.UNKNOWN_FUNCTION, functionName);
-      prefix = defaultPrefix;
+      prefix = "";
       localName = functionName;
     } else {
       prefix = functionName.substring( 0, index );
@@ -156,7 +153,7 @@ public class FunctionInvocation
     Class[] params = target.getParameterTypes();
     if (params.length != argumentList.size())
       pLogger.logError(Constants.INAPPROPRIATE_FUNCTION_ARG_COUNT,
-		       new Integer(params.length),
+		       functionName, new Integer(params.length),
 		       new Integer(argumentList.size()));
 
     // now, walk through each parameter, evaluating and casting its argument
@@ -165,7 +162,6 @@ public class FunctionInvocation
       // evaluate
       arguments[i] = ((Expression) argumentList.get(i)).evaluate(pResolver,
 								 functions,
-								 defaultPrefix,
 								 pLogger);
       // coerce
       arguments[i] = Coercions.coerce(arguments[i], params[i], pLogger);

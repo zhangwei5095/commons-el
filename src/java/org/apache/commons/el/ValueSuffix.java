@@ -88,7 +88,6 @@ public abstract class ValueSuffix
   public abstract Object evaluate (Object pValue,
 				   VariableResolver pResolver,
 				   FunctionMapper functions,
-				   String defaultPrefix,
 				   Logger pLogger)
     throws ELException;
 
