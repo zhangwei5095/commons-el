@@ -3,7 +3,7 @@
 
 <!--
         "Expression Language" component of the Jakarta Commons Subproject
-        $Id: build.xml,v 1.4 2003/03/12 20:07:21 costin Exp $
+        $Id: build.xml,v 1.5 2003/03/13 22:00:32 costin Exp $
 -->
 
 
@@ -247,8 +247,10 @@
     <copy      file="../LICENSE"
              tofile="${build.home}/classes/META-INF/LICENSE.txt"/>
     <jar    jarfile="${commons-el.jar}"
-            basedir="${build.home}/classes"
-           manifest="${build.home}/conf/MANIFEST.MF"/>
+           manifest="${build.home}/conf/MANIFEST.MF">
+     <fileset dir="${build.home}/classes" includes="org/apache/commons/el/**" />
+     <fileset dir="${build.home}/classes" includes="META-INF/LICENSE.txt" />
+    </jar>
   </target>
 
   <target name="jar-only" depends="init,compile-only" >
