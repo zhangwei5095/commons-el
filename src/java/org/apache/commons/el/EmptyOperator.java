@@ -56,7 +56,7 @@
 package org.apache.commons.el;
 
 import java.lang.reflect.Array;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import javax.servlet.jsp.el.ELException;
 
@@ -124,15 +124,15 @@ public class EmptyOperator
       return PrimitiveObjects.getBoolean (true);
     }
 
-    // See if the value is an empty List
-    else if (pValue instanceof List &&
-	     ((List) pValue).isEmpty ()) {
-      return PrimitiveObjects.getBoolean (true);
-    }
-
     // See if the value is an empty Map
     else if (pValue instanceof Map &&
 	     ((Map) pValue).isEmpty ()) {
+      return PrimitiveObjects.getBoolean (true);
+    }
+
+    // See if the value is an empty Collection
+    else if (pValue instanceof Collection &&
+	     ((Collection) pValue).isEmpty ()) {
       return PrimitiveObjects.getBoolean (true);
     }
 
