@@ -1,5 +1,7 @@
-Extension-Name: @package@
+Extension-Name: org.apache.commons.el
+Specification-Title: Jakarta Commons EL
 Specification-Vendor: Apache Software Foundation
-Specification-Version: 1.0
+Specification-Version: 2.0
+Implementation-Title: org.apache.commons.el
 Implementation-Vendor: Apache Software Foundation
-Implementation-Version: @version@
+Implementation-Version: 1.0
