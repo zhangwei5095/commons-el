@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+  <extend>../project.xml</extend>
+  <name>EL</name>
+  <id>commons-el</id>
+  <currentVersion>1.0</currentVersion>
+  <inceptionYear>2003</inceptionYear>
+  <shortDescription>JSP 2.0 Expression Language Interpreter</shortDescription>
+  <description>JSP 2.0 Expression Language Interpreter Implementation</description>
+  <url>http://jakarta.apache.org/commons/el/</url>
+  <developers>
+    <developer>
+      <name>Nathan Abramson</name>
+      <id>arista</id>
+      <email>arista@alum.mit.edu</email>
+      <organization>Massachusetts Institute of Technology</organization>
+    </developer>
+    <developer>
+      <name>Shawn Bayern</name>
+      <id>shawn</id>
+      <email>shawn@apache.org</email>
+      <organization>Apache Software Foundation</organization>
+    </developer>
+    <developer>
+      <name>Pierre Delisle</name>
+      <id>pierred</id>
+      <email>pierre.delisle@sun.com</email>
+      <organization>Sun Microsystems, Inc.</organization>
+    </developer>
+    <developer>
+      <name>Craig McClanahan</name>
+      <id>craigmcc</id>
+      <email>craigmcc@apache.org</email>
+      <organization>Apache Software Foundation</organization>
+    </developer>
+    <developer>
+      <name>Jan Luehe</name>
+      <id>luehe</id>
+      <email>jan.luehe@sun.com</email>
+      <organization>Sun Microsystems, Inc.</organization>
+    </developer>
+  </developers>
+  
+  <dependencies>
+    <dependency>
+      <id>jakarta-servletapi-5</id>
+    </dependency>
+  </dependencies>
+
+</project>
