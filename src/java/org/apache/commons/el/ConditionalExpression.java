@@ -140,20 +140,19 @@ public class ConditionalExpression
    **/
   public Object evaluate (VariableResolver vr,
 			  FunctionMapper f,
-			  String p,
 			  Logger l)
     throws ELException
   {
     // first, evaluate the condition (and coerce the result to a boolean value)
     boolean condition =
       Coercions.coerceToBoolean(
-        mCondition.evaluate(vr, f, p, l), l).booleanValue();
+        mCondition.evaluate(vr, f, l), l).booleanValue();
 
     // then, use this boolean to branch appropriately
     if (condition)
-      return mTrueBranch.evaluate(vr, f, p, l);
+      return mTrueBranch.evaluate(vr, f, l);
     else
-      return mFalseBranch.evaluate(vr, f, p, l);
+      return mFalseBranch.evaluate(vr, f, l);
   }
 
   //-------------------------------------

@@ -150,12 +150,10 @@ public class UnaryOperatorExpression
    **/
   public Object evaluate (VariableResolver pResolver,
 			  FunctionMapper functions,
-			  String defaultPrefix,
 			  Logger pLogger)
     throws ELException
   {
-    Object value = mExpression.evaluate (pResolver, functions,
-					 defaultPrefix, pLogger);
+    Object value = mExpression.evaluate (pResolver, functions, pLogger);
     if (mOperator != null) {
       value = mOperator.apply (value, pLogger);
     }

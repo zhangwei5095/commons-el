@@ -105,7 +105,6 @@ public class PropertySuffix
    **/
   Object evaluateIndex (VariableResolver pResolver,
                         FunctionMapper functions,
-                        String defaultPrefix,
                         Logger pLogger)
     throws ELException
   {

@@ -134,18 +134,15 @@ public class ComplexValue
    **/
   public Object evaluate (VariableResolver pResolver,
 			  FunctionMapper functions,
-			  String defaultPrefix,
 			  Logger pLogger)
     throws ELException
   {
-    Object ret = mPrefix.evaluate (pResolver, functions,
-				   defaultPrefix, pLogger);
+    Object ret = mPrefix.evaluate (pResolver, functions, pLogger);
 
     // Apply the suffixes
     for (int i = 0; mSuffixes != null && i < mSuffixes.size (); i++) {
       ValueSuffix suffix = (ValueSuffix) mSuffixes.get (i);
-      ret = suffix.evaluate (ret, pResolver, functions,
-			     defaultPrefix, pLogger);
+      ret = suffix.evaluate (ret, pResolver, functions, pLogger);
     }
 
     return ret;

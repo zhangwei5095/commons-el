@@ -102,7 +102,6 @@ public abstract class Literal
    **/
   public Object evaluate (VariableResolver pResolver,
 			  FunctionMapper functions,
-			  String defaultPrefix,
 			  Logger pLogger)
     throws ELException
   {
