@@ -90,7 +90,6 @@ public abstract class Expression
    **/
   public abstract Object evaluate (VariableResolver pResolver,
 				   FunctionMapper functions,
-				   String defaultPrefix,
 				   Logger pLogger)
     throws ELException;
 

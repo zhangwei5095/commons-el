@@ -114,7 +114,6 @@ public class NamedValue
    **/
   public Object evaluate (VariableResolver pResolver,
 			  FunctionMapper functions,
-			  String defaultPrefix,
 			  Logger pLogger)
     throws ELException
   {

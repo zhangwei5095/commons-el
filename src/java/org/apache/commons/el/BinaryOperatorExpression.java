@@ -148,12 +148,10 @@ public class BinaryOperatorExpression
    **/
   public Object evaluate (VariableResolver pResolver,
 			  FunctionMapper functions,
-			  String defaultPrefix,
 			  Logger pLogger)
     throws ELException
   {
-    Object value = mExpression.evaluate (pResolver, functions,
-					 defaultPrefix, pLogger);
+    Object value = mExpression.evaluate (pResolver, functions, pLogger);
     for (int i = 0; i < mOperators.size (); i++) {
       BinaryOperator operator = (BinaryOperator) mOperators.get (i);
 
@@ -166,7 +164,7 @@ public class BinaryOperatorExpression
       if (operator.shouldEvaluate (value)) {
 	Expression expression = (Expression) mExpressions.get (i);
 	Object nextValue = expression.evaluate (pResolver,
-						functions, defaultPrefix,
+						functions,
 						pLogger);
 
 	value = operator.apply (value, nextValue, pLogger);

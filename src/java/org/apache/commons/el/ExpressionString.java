@@ -101,7 +101,6 @@ public class ExpressionString
    **/
   public String evaluate (VariableResolver pResolver,
 			  FunctionMapper functions,
-			  String defaultPrefix,
 			  Logger pLogger)
     throws ELException
   {
@@ -115,7 +114,6 @@ public class ExpressionString
 	Object val = 
 	  ((Expression) elem).evaluate (pResolver,
 					functions,
-					defaultPrefix,
 					pLogger);
 	if (val != null) {
 	  buf.append (val.toString ());
