@@ -74,7 +74,7 @@ import javax.servlet.jsp.PageContext;
  * correct implicit object for a given implicit object name.
  * 
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rdonkin $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: luehe $
  **/
 
 public class ImplicitObjects
@@ -535,10 +535,10 @@ public class ImplicitObjects
 	  if (pKey instanceof String) {
 	    // Drain the header enumeration
 	    List l = new ArrayList ();
-	    Enumeration enum = request.getHeaders ((String) pKey);
-	    if (enum != null) {
-	      while (enum.hasMoreElements ()) {
-		l.add (enum.nextElement ());
+	    Enumeration e = request.getHeaders ((String) pKey);
+	    if (e != null) {
+	      while (e.hasMoreElements ()) {
+		l.add (e.nextElement ());
 	      }
 	    }
 	    String [] ret = (String []) l.toArray (new String [l.size ()]);
