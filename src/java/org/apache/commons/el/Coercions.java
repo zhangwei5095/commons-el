@@ -57,6 +57,8 @@ package org.apache.commons.el;
 
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
+import java.math.BigInteger;
+import java.math.BigDecimal;
 import javax.servlet.jsp.el.ELException;
 
 /**
@@ -199,7 +201,7 @@ import javax.servlet.jsp.el.ELException;
  *     otherwise
  *       return A.toString
  * 
- *   coerce A to primitive Number type N
+ *   coerce A to Number type N
  *     A is null or ""
  *       return 0
  *     A is Character
@@ -208,14 +210,30 @@ import javax.servlet.jsp.el.ELException;
  *       error
  *     A is Number type N
  *       return A
- *     A is Number with less precision than N
- *       coerce quietly
- *     A is Number with greater precision than N
- *       coerce quietly
+ *     A is Number, coerce quietly to type N using the following algorithm
+ *         If N is BigInteger
+ *             If A is BigDecimal, return <code>A.toBigInteger()</code>
+ *             Otherwise, return <code>BigInteger.valueOf(A.longValue())</code>
+ *        if N is BigDecimal
+ *             If A is a BigInteger, return <code>new BigDecimal(A)</code>
+ *             Otherwise, return <code>new BigDecimal(A.doubleValue())</code>
+ *        If N is Byte, return <code>new Byte(A.byteValue())</code>
+ *        If N is Short, return <code>new Short(A.shortValue())</code>
+ *        If N is Integer, return <code>new Integer(A.integerValue())</code>
+ *        If N is Long, return <code>new Long(A.longValue())</code>
+ *        If N is Float, return <code>new Float(A.floatValue())</code>
+ *        If N is Double, return <code>new Double(A.doubleValue())</code>
+ *        otherwise ERROR
  *     A is String
- *       new N.valueOf(A) throws exception
+ *       If N is BigDecimal then:
+ *            If <code>new BigDecimal(A)</code> throws an exception then ERROR
+ *            Otherwise, return <code>new BigDecimal(A)</code>
+ *       If N is BigInteger then:
+ *            If <code>new BigInteger(A)</code> throws an exception, then ERROR
+ *            Otherwise, return <code>new BigInteger(A)</code>
+ *       new <code>N.valueOf(A)</code> throws exception
  *         error
- *       return N.valueOf(A)
+ *       return <code>N.valueOf(A)</code>
  *     otherwise
  *       error
  * 
@@ -271,6 +289,7 @@ import javax.servlet.jsp.el.ELException;
 
 public class Coercions
 {
+   private static final Number ZERO = new Integer(0);
   //-------------------------------------
   /**
    *
@@ -284,7 +303,7 @@ public class Coercions
     if (pClass == String.class) {
       return coerceToString (pValue, pLogger);
     }
-    else if (isPrimitiveNumberClass (pClass)) {
+    else if (isNumberClass (pClass)) {
       return coerceToPrimitiveNumber (pValue, pClass, pLogger);
     }
     else if (pClass == Character.class ||
@@ -304,9 +323,9 @@ public class Coercions
   /**
    *
    * Returns true if the given class is Byte, Short, Integer, Long,
-   * Float, Double
+   * Float, Double, BigInteger, or BigDecimal
    **/
-  static boolean isPrimitiveNumberClass (Class pClass)
+  static boolean isNumberClass (Class pClass)
   {
     return
       pClass == Byte.class ||
@@ -320,7 +339,9 @@ public class Coercions
       pClass == Float.class ||
       pClass == Float.TYPE ||
       pClass == Double.class ||
-      pClass == Double.TYPE;
+      pClass == Double.TYPE ||
+      pClass == BigInteger.class ||
+      pClass == BigDecimal.class;
   }
 
   //-------------------------------------
@@ -365,11 +386,11 @@ public class Coercions
   {
     if (pValue == null ||
 	"".equals (pValue)) {
-      return coerceToPrimitiveNumber (0, pClass);
+      return coerceToPrimitiveNumber (ZERO, pClass);
     }
     else if (pValue instanceof Character) {
       char val = ((Character) pValue).charValue ();
-      return coerceToPrimitiveNumber ((short) val, pClass);
+      return coerceToPrimitiveNumber (new Short((short) val), pClass);
     }
     else if (pValue instanceof Boolean) {
       if (pLogger.isLoggingError ()) {
@@ -377,7 +398,7 @@ public class Coercions
 			  pValue,
 			  pClass.getName ());
       }
-      return coerceToPrimitiveNumber (0, pClass);
+      return coerceToPrimitiveNumber (ZERO, pClass);
     }
     else if (pValue.getClass () == pClass) {
       return (Number) pValue;
@@ -396,7 +417,7 @@ public class Coercions
 	     (String) pValue,
 	     pClass.getName ());
 	}
-	return coerceToPrimitiveNumber (0, pClass);
+	return coerceToPrimitiveNumber (ZERO, pClass);
       }
     }
     else {
@@ -486,7 +507,7 @@ public class Coercions
       return PrimitiveObjects.getInteger ((int) pValue);
     }
     else if (pClass == Long.class || pClass == Long.TYPE) {
-      return PrimitiveObjects.getLong ((long) pValue);
+      return PrimitiveObjects.getLong (pValue);
     }
     else if (pClass == Float.class || pClass == Float.TYPE) {
       return PrimitiveObjects.getFloat ((float) pValue);
@@ -524,7 +545,7 @@ public class Coercions
       return PrimitiveObjects.getFloat ((float) pValue);
     }
     else if (pClass == Double.class || pClass == Double.TYPE) {
-      return PrimitiveObjects.getDouble ((double) pValue);
+      return PrimitiveObjects.getDouble (pValue);
     }
     else {
       return PrimitiveObjects.getInteger (0);
@@ -558,6 +579,18 @@ public class Coercions
     else if (pClass == Double.class || pClass == Double.TYPE) {
       return PrimitiveObjects.getDouble (pValue.doubleValue ());
     }
+    else if (pClass == BigInteger.class) {
+        if (pValue instanceof BigDecimal)
+            return ((BigDecimal) pValue).toBigInteger();
+        else
+            return BigInteger.valueOf(pValue.longValue());
+    }
+    else if (pClass == BigDecimal.class) {
+        if (pValue instanceof BigInteger)
+            return new BigDecimal((BigInteger) pValue);
+        else
+            return new BigDecimal(pValue.doubleValue());
+    }
     else {
       return PrimitiveObjects.getInteger (0);
     }
@@ -589,6 +622,12 @@ public class Coercions
     }
     else if (pClass == Double.class || pClass == Double.TYPE) {
       return Double.valueOf (pValue);
+    }
+    else if (pClass == BigInteger.class) {
+        return new BigInteger(pValue);
+    }
+    else if (pClass == BigDecimal.class) {
+        return new BigDecimal(pValue);
     }
     else {
       return PrimitiveObjects.getInteger (0);
