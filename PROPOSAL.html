@@ -13,7 +13,7 @@
 <p>The JSP Standard Tag Library (JSTL), version 1.0, introduced the
 concept of an Expression Language (EL), whose main goal is to provide
 page authors with an easy way to access and manipulate application
-data without requiring the use of scriptlets
+data without requiring the use of scriptlets </p>
 
 <p>JSP 2.0 adopted the EL specification from JSTL, and expanded its
 scope: EL expressions are no longer limited to JSTL action attributes,
@@ -24,13 +24,13 @@ added an important feature to the EL specification: EL functions,
 which allow page authors to invoke static methods in Java classes from
 EL expressions. Additionally, JSP 2.0 allows programmatic access and
 customization of the EL evaluator through a set of standard interfaces
-and abstract classes.
+and abstract classes. </p>
 
 <p>Currently, there are a number of projects (including Tomcat 5 and Java
 Server Faces) that leverage the EL implementation of the Standard
 Taglib. In addition, there seems to be interest in leveraging the EL
 in the context of scripting workflow activities using custom tag
-libraries.
+libraries. </p>
 
 <p>In order to make the EL implementation available to Tomcat 5, the
 Tomcat team defined a new "ant" target for the Standard Taglib that
@@ -38,7 +38,7 @@ builds just the EL portion and packages it in a JAR file
 (&quot;jsp20el.jar&quot;) which is stored in Tomcat's common/lib
 directory. This approach has always been considered an interim
 solution only, until the EL implementation would move from the
-Standard Taglib to a more visible location such as jakarta-commons.
+Standard Taglib to a more visible location such as jakarta-commons. </p>
 
 <h3>(1) Scope of the package</h3>
 
