@@ -21,7 +21,6 @@
       <item name="Overview" href="/index.html"/>
       <item name="Mailing lists" href="/mail-lists.html"/>
       <item name="Team" href="/team-list.html"/>
-      <item name="Tasks" href="/tasks.html"/>
       <item name="CVS" href="http://cvs.apache.org/viewcvs/jakarta-commons/el/"/>
       <item name="Javadoc (CVS latest)" href="apidocs/index.html"/>
     </menu>
