@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE project [
+<!ENTITY commons-nav SYSTEM "../../commons-build/incl_nav.xml">
+]>
+
+<project name="EL">
+
+  <title>EL</title>
+  <organizationLogo href="/images/jakarta-logo-blue.gif">
+   Jakarta
+  </organizationLogo>
+
+  <body>
+    <links>
+      <item name="Jakarta Commons"                   
+            href="http://jakarta.apache.org/commons/"/>
+    </links>
+
+    <menu name="Commons EL">
+      <item name="Overview" href="/index.html"/>
+      <item name="Mailing lists" href="/mail-lists.html"/>
+      <item name="Team" href="/team-list.html"/>
+      <item name="Tasks" href="/tasks.html"/>
+      <item name="CVS" href="http://cvs.apache.org/viewcvs/jakarta-commons/el/"/>
+      <item name="Javadoc (CVS latest)" href="apidocs/index.html"/>
+    </menu>
+    
+    &commons-nav;
+
+  </body>
+</project>

@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+<document>
+
+ <properties>
+  <title>Commons</title>
+  <author email="commons-dev@jakarta.apache.org">Commons Documentation Team</author>
+ </properties>
+
+ <body>
+
+<section name="The EL Component">
+
+<subsection name='What Is EL?'>
+    <p>
+    EL is the JSP 2.0 Expression Language Interpreter from Apache.
+    </p>
+</subsection>
+
+<subsection name='What Is The JSP 2.0 Expression Language?'>
+<p>
+The JSP Standard Tag Library (JSTL), version 1.0, introduced the concept of an Expression Language (EL), whose main goal is to provide page authors with an easy way to access and manipulate application data without requiring the use of scriptlets 
+</p>
+
+<p>
+JSP 2.0 adopted the EL specification from JSTL, and expanded its scope: EL expressions are no longer limited to JSTL action attributes, but may be used in any standard or custom action attribute declared to accept a runtime expression. In addition, EL expressions may now also be used directly in template text outside of any actions. JSP 2.0 also added an important feature to the EL specification: EL functions, which allow page authors to invoke static methods in Java classes from EL expressions. Additionally, JSP 2.0 allows programmatic access and customization of the EL evaluator through a set of standard interfaces and abstract classes. 
+</p>
+</subsection>
+
+</section>
+
+
+<section name="Documentation">
+
+<p>The <a href="http://jakarta.apache.org/commons/el/RELEASE-NOTES.txt">
+Release Notes</a> document the new features and bug fixes that have been
+included in the latest release.</p>
+
+<p>The <a href="http://jakarta.apache.org/commons/el/api/index.html">
+JavaDoc API documents</a> for the latest release are available online.  
+In particular, you should read the package overview of the <code>org.apache.commons.el</code> package.</p>
+
+</section>
+
+
+<section name="Releases">
+
+<ul>
+<li>Version 1.0 (from mirror) - 20 Jun 2003
+       <a href="http://jakarta.apache.org/site/binindex.cgi">binary</a>
+       <a href="http://jakarta.apache.org/site/sourceindex.cgi">source</a> (latest)</li>
+</ul>
+
+</section>
+
+
+</body>
+</document>

@@ -44,7 +44,16 @@
   
   <dependencies>
     <dependency>
-      <id>jakarta-servletapi-5</id>
+      <id>servletapi</id>
+      <version>2.4</version>
+    </dependency>
+    <dependency>
+      <id>jspapi</id>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <id>commons-logging</id>
+      <version>1.0.3</version>
     </dependency>
   </dependencies>
 
