@@ -48,11 +48,12 @@ public interface ELParserConstants {
   int OR1 = 46;
   int OR2 = 47;
   int EMPTY = 48;
-  int IDENTIFIER = 49;
-  int IMPL_OBJ_START = 50;
-  int LETTER = 51;
-  int DIGIT = 52;
-  int ILLEGAL_CHARACTER = 53;
+  int COND = 49;
+  int IDENTIFIER = 50;
+  int IMPL_OBJ_START = 51;
+  int LETTER = 52;
+  int DIGIT = 53;
+  int ILLEGAL_CHARACTER = 54;
 
   int DEFAULT = 0;
   int IN_EXPRESSION = 1;
@@ -107,6 +108,7 @@ public interface ELParserConstants {
     "\"or\"",
     "\"||\"",
     "\"empty\"",
+    "\"?\"",
     "<IDENTIFIER>",
     "\"#\"",
     "<LETTER>",

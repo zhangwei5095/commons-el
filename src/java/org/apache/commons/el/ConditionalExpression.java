@@ -56,55 +56,66 @@
 package org.apache.commons.el;
 
 import java.util.List;
+import java.util.Map;
 import javax.servlet.jsp.el.ELException;
 import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.el.FunctionMapper;
 
 /**
  *
- * <p>Represents a dynamic value, which consists of a prefix and an
- * optional set of ValueSuffix elements.  A prefix is something like
- * an identifier, and a suffix is something like a "property of" or
- * "indexed element of" operator.
+ * <p>Represents a conditional expression.  I've decided not to produce an
+ * abstract base "TernaryOperatorExpression" class since (a) future ternary
+ * operators are unlikely and (b) it's not clear that there would be a
+ * meaningful way to abstract them.  (For instance, would they all be right-
+ * associative?  Would they all have two fixed operator symbols?)
  * 
- * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: luehe $
  **/
 
-public class ComplexValue
+public class ConditionalExpression
   extends Expression
 {
   //-------------------------------------
   // Properties
   //-------------------------------------
-  // property prefix
+  // property condition
 
-  Expression mPrefix;
-  public Expression getPrefix ()
-  { return mPrefix; }
-  public void setPrefix (Expression pPrefix)
-  { mPrefix = pPrefix; }
+  Expression mCondition;
+  public Expression getCondition ()
+  { return mCondition; }
+  public void setCondition (Expression pCondition)
+  { mCondition = pCondition; }
 
   //-------------------------------------
-  // property suffixes
+  // property trueBranch
 
-  List mSuffixes;
-  public List getSuffixes ()
-  { return mSuffixes; }
-  public void setSuffixes (List pSuffixes)
-  { mSuffixes = pSuffixes; }
+  Expression mTrueBranch;
+  public Expression getTrueBranch ()
+  { return mTrueBranch; }
+  public void setTrueBranch (Expression pTrueBranch)
+  { mTrueBranch = pTrueBranch; }
+
+  //-------------------------------------
+  // property falseBranch
+
+  Expression mFalseBranch;
+  public Expression getFalseBranch ()
+  { return mFalseBranch; }
+  public void setFalseBranch (Expression pFalseBranch)
+  { mFalseBranch = pFalseBranch; }
 
   //-------------------------------------
   /**
    *
    * Constructor
    **/
-  public ComplexValue (Expression pPrefix,
-		       List pSuffixes)
+  public ConditionalExpression (Expression pCondition,
+				Expression pTrueBranch,
+				Expression pFalseBranch)
   {
-    mPrefix = pPrefix;
-    mSuffixes = pSuffixes;
+    mCondition = pCondition;
+    mTrueBranch = pTrueBranch;
+    mFalseBranch = pFalseBranch;
   }
 
   //-------------------------------------
@@ -116,36 +127,32 @@ public class ComplexValue
    **/
   public String getExpressionString ()
   {
-    StringBuffer buf = new StringBuffer ();
-    buf.append (mPrefix.getExpressionString ());
-
-    for (int i = 0; mSuffixes != null && i < mSuffixes.size (); i++) {
-      ValueSuffix suffix = (ValueSuffix) mSuffixes.get (i);
-      buf.append (suffix.getExpressionString ());
-    }
-
-    return buf.toString ();
+    return
+      "( " + mCondition.getExpressionString() + " ? " + 
+      mTrueBranch.getExpressionString() + " : " +
+      mFalseBranch.getExpressionString() + " )";
   }
 
   //-------------------------------------
   /**
    *
-   * Evaluates by evaluating the prefix, then applying the suffixes
+   * Evaluates the conditional expression and returns the literal result
    **/
-  public Object evaluate (VariableResolver pResolver,
-			  FunctionMapper functions,
-			  Logger pLogger)
+  public Object evaluate (VariableResolver vr,
+			  FunctionMapper f,
+			  Logger l)
     throws ELException
   {
-    Object ret = mPrefix.evaluate (pResolver, functions, pLogger);
+    // first, evaluate the condition (and coerce the result to a boolean value)
+    boolean condition =
+      Coercions.coerceToBoolean(
+        mCondition.evaluate(vr, f, l), l).booleanValue();
 
-    // Apply the suffixes
-    for (int i = 0; mSuffixes != null && i < mSuffixes.size (); i++) {
-      ValueSuffix suffix = (ValueSuffix) mSuffixes.get (i);
-      ret = suffix.evaluate (ret, pResolver, functions, pLogger);
-    }
-
-    return ret;
+    // then, use this boolean to branch appropriately
+    if (condition)
+      return mTrueBranch.evaluate(vr, f, l);
+    else
+      return mFalseBranch.evaluate(vr, f, l);
   }
 
   //-------------------------------------

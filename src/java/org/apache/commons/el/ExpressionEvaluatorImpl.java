@@ -177,27 +177,20 @@ public class ExpressionEvaluatorImpl
    *     runtime to resolve the name of implicit objects into Objects.
    * @param functions A FunctionMapper to resolve functions found in 
    *     the expression.  It can be null, in which case no functions 
-   *     are supported for this invocation.  The FunctionMapper will be
-   *     invoked one or more times between parsing the expression and
-   *     evaluating it, and must return a consistent value each time
-   *     it is invoked.
-   * @param defaultPrefix The default prefix to use when a function is
-   *     encountered with no prefix.
+   *     are supported for this invocation.
    * @return the expression String evaluated to the given expected
    * type
    **/
   public Object evaluate (String pExpressionString,
 			  Class pExpectedType,
                           VariableResolver pResolver,
-			  FunctionMapper functions,
-			  String defaultPrefix)
+			  FunctionMapper functions)
     throws ELException
   {
     return evaluate (pExpressionString,
 		     pExpectedType,
                      pResolver,
 		     functions,
-		     defaultPrefix,
 		     sLogger);
   }
 
@@ -209,31 +202,31 @@ public class ExpressionEvaluatorImpl
    *
    * @param expression The expression to be evaluated.
    * @param expectedType The expected type of the result of the evaluation
-   * @param fMapper A FunctionMapper to resolve functions found in 
-   *     the expression.  It can be null, in which case no functions 
-   *     are supported for this invocation.  The FunctionMapper will be
-   *     invoked one or more times between parsing the expression and
-   *     evaluating it, and must return a consistent value each time
-   *     it is invoked.
-   * @param defaultPrefix The default prefix to use when a function is
-   *     encountered with no prefix.
+   * @param fMapper A FunctionMapper to resolve functions found in
+   *     the expression.  It can be null, in which case no functions
+   *     are supported for this invocation.  The ExpressionEvaluator
+   *     must not hold on to the FunctionMapper reference after
+   *     returning from <code>parseExpression()</code>.  The
+   *     <code>Expression</code> object returned must invoke the same
+   *     functions regardless of whether the mappings in the
+   *     provided <code>FunctionMapper</code> instance change between
+   *     calling <code>ExpressionEvaluator.parseExpression()</code>
+   *     and <code>Expression.evaluate()</code>.
    * @return The Expression object encapsulating the arguments.
    *
    * @exception ELException Thrown if parsing errors were found.
    **/
   public javax.servlet.jsp.el.Expression parseExpression(String expression, 
 							 Class expectedType, 
-							 FunctionMapper fMapper,
-							 String defaultPrefix) 
+							 FunctionMapper fMapper)
     throws ELException 
   {
     // Validate and then create an Expression object.
     parseExpressionString(expression);
         
     // Create an Expression object that knows how to evaluate this.
-    return new JSTLExpression(this, expression, expectedType, fMapper, 
-			      defaultPrefix );
-    }
+    return new JSTLExpression(this, expression, expectedType, fMapper);
+  }
 
   //-------------------------------------
   /**
@@ -244,7 +237,6 @@ public class ExpressionEvaluatorImpl
 		   Class pExpectedType,
 		   VariableResolver pResolver,
 		   FunctionMapper functions,
-		   String defaultPrefix,
 		   Logger pLogger)
     throws ELException
   {
@@ -271,7 +263,6 @@ public class ExpressionEvaluatorImpl
       Object value = 
 	((Expression) parsedValue).evaluate (pResolver,
 					     functions,
-					     defaultPrefix,
 					     pLogger);
       return convertToExpectedType (value, 
 				    pExpectedType,
@@ -283,7 +274,6 @@ public class ExpressionEvaluatorImpl
       String strValue = 
 	((ExpressionString) parsedValue).evaluate (pResolver,
 						   functions,
-						   defaultPrefix,
 						   pLogger);
       return convertToExpectedType (strValue,
 				    pExpectedType,
@@ -544,17 +534,14 @@ public class ExpressionEvaluatorImpl
     private String expression;
     private Class expectedType;
     private FunctionMapper fMapper;
-    private String defaultPrefix;
-        
+
     public JSTLExpression(ExpressionEvaluatorImpl evaluator, String expression,
-			  Class expectedType, FunctionMapper fMapper,
-			  String defaultPrefix)
+			  Class expectedType, FunctionMapper fMapper)
     {
       this.evaluator = evaluator;
       this.expression = expression;
       this.expectedType = expectedType;
       this.fMapper = fMapper;
-      this.defaultPrefix = defaultPrefix;
     }
         
     public Object evaluate( VariableResolver vResolver )
@@ -563,8 +550,7 @@ public class ExpressionEvaluatorImpl
       return evaluator.evaluate(this.expression,
 				this.expectedType,
 				vResolver,
-				this.fMapper,
-				this.defaultPrefix);
+				this.fMapper);
     }
   }
 
