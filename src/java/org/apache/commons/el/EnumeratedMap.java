@@ -33,7 +33,7 @@ import java.util.Set;
  * the underlying data source is immutable.
  * 
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: scolebourne $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
  **/
 
 public abstract class EnumeratedMap

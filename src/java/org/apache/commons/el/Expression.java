@@ -27,7 +27,7 @@ import javax.servlet.jsp.el.FunctionMapper;
  * 
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: scolebourne $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
  **/
 
 public abstract class Expression

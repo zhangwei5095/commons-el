@@ -20,7 +20,7 @@ import java.text.MessageFormat;
 /**
  * <p>Utility class for generating parameterized messages.</p> 
  * 
- * @version $Id: MessageUtil.java,v 1.3 2004/02/25 22:40:47 scolebourne Exp $
+ * @version $Id$
  */
 
 public class MessageUtil

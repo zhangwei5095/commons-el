@@ -22,7 +22,7 @@ package org.apache.commons.el;
  * ints, and longs, values -1000 to 1000 are cached.
  * 
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: scolebourne $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
  **/
 
 class PrimitiveObjects

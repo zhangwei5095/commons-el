@@ -1,4 +1,4 @@
-$Id: RELEASE-NOTES.txt,v 1.1 2003/06/06 22:16:05 luehe Exp $
+$Id$
 
                           Commons EL Package
                               Version 1.0
