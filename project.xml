@@ -20,8 +20,9 @@
   <name>EL</name>
   <id>commons-el</id>
   <currentVersion>1.0</currentVersion>
+  <logo></logo>
   <inceptionYear>2003</inceptionYear>
-  <shortDescription>JSP 2.0 Expression Language Interpreter</shortDescription>
+  <shortDescription>Commons EL</shortDescription>
   <description>JSP 2.0 Expression Language Interpreter Implementation</description>
 
   <developers>
@@ -72,4 +73,21 @@
     </dependency>
   </dependencies>
 
+  <reports>
+     <report>maven-changelog-plugin</report>
+     <report>maven-changes-plugin</report>
+     <!--report>maven-checkstyle-plugin</report-->
+     <!--report>maven-clover-plugin</report-->
+     <report>maven-developer-activity-plugin</report>
+     <report>maven-file-activity-plugin</report>
+     <report>maven-javadoc-plugin</report>
+     <!--report>maven-jellydoc-plugin</report-->
+     <report>maven-junit-report-plugin</report>
+     <report>maven-jxr-plugin</report>
+     <report>maven-license-plugin</report>
+     <!--report>maven-linkcheck-plugin</report-->
+     <!--report>maven-statcvs-plugin</report-->
+     <!--report>maven-tasklist-plugin</report-->
+  </reports>
+  
 </project>
