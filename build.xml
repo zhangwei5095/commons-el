@@ -3,7 +3,7 @@
 
 <!--
         "Expression Language" component of the Jakarta Commons Subproject
-        $Id: build.xml,v 1.6 2003/06/06 22:35:28 luehe Exp $
+        $Id: build.xml,v 1.7 2003/06/19 21:40:47 luehe Exp $
 -->
 
 
@@ -53,7 +53,7 @@
   <property name="component.title"         value="JSP 2.0 Expression Language Implementation"/>
 
   <!-- The current version number of this component -->
-  <property name="component.version"       value="1.0"/>
+  <property name="component.version"       value="1.1-dev"/>
 
   <!-- The base directory for compilation targets -->
   <property name="build.home"              value="target"/>
