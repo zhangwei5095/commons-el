@@ -103,9 +103,7 @@ public class GreaterThanOrEqualsOperator
    *
    * Applies the operator to the given value
    **/
-  public Object apply (Object pLeft,
-		       Object pRight,
-		       Logger pLogger)
+  public Object apply (Object pLeft, Object pRight)
     throws ELException
   {
     if (pLeft == pRight) {
@@ -116,7 +114,7 @@ public class GreaterThanOrEqualsOperator
       return Boolean.FALSE;
     }
     else {
-      return super.apply (pLeft, pRight, pLogger);
+      return super.apply (pLeft, pRight);
     }
   }
 

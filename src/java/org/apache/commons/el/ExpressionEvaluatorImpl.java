@@ -69,6 +69,8 @@ import org.apache.commons.el.parser.ELParser;
 import org.apache.commons.el.parser.ParseException;
 import org.apache.commons.el.parser.Token;
 import org.apache.commons.el.parser.TokenMgrError;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -124,9 +126,10 @@ import org.apache.commons.el.parser.TokenMgrError;
 public class ExpressionEvaluatorImpl
   extends ExpressionEvaluator
 {
-  //-------------------------------------
-  // Properties
-  //-------------------------------------
+    //-------------------------------------
+    // Constants
+    //-------------------------------------
+    private static Log log = LogFactory.getLog(ExpressionEvaluatorImpl.class);
 
   //-------------------------------------
   // Member variables
@@ -139,10 +142,7 @@ public class ExpressionEvaluatorImpl
 
   /** The mapping from ExpectedType to Maps mapping literal String to
       parsed value **/
-  static Map sCachedExpectedTypes = new HashMap ();
-
-  /** The static Logger **/
-  static Logger sLogger = new Logger (System.out);
+  static Map sCachedExpectedTypes = new HashMap ();  
 
   /** Flag if the cache should be bypassed **/
   boolean mBypassCache;
@@ -167,32 +167,6 @@ public class ExpressionEvaluatorImpl
   }
 
   //-------------------------------------
-  /**
-   *
-   * Evaluates the given expression String
-   *
-   * @param pExpressionString The expression to be evaluated.
-   * @param pExpectedType The expected type of the result of the evaluation
-   * @param pResolver A VariableResolver instance that can be used at 
-   *     runtime to resolve the name of implicit objects into Objects.
-   * @param functions A FunctionMapper to resolve functions found in 
-   *     the expression.  It can be null, in which case no functions 
-   *     are supported for this invocation.
-   * @return the expression String evaluated to the given expected
-   * type
-   **/
-  public Object evaluate (String pExpressionString,
-			  Class pExpectedType,
-                          VariableResolver pResolver,
-			  FunctionMapper functions)
-    throws ELException
-  {
-    return evaluate (pExpressionString,
-		     pExpectedType,
-                     pResolver,
-		     functions,
-		     sLogger);
-  }
 
   /**
    *
@@ -229,15 +203,24 @@ public class ExpressionEvaluatorImpl
   }
 
   //-------------------------------------
-  /**
-   *
-   * Evaluates the given expression string
-   **/
-  Object evaluate (String pExpressionString,
+    /**
+     *
+     * Evaluates the given expression String
+     *
+     * @param pExpressionString The expression to be evaluated.
+     * @param pExpectedType The expected type of the result of the evaluation
+     * @param pResolver A VariableResolver instance that can be used at 
+     *     runtime to resolve the name of implicit objects into Objects.
+     * @param functions A FunctionMapper to resolve functions found in 
+     *     the expression.  It can be null, in which case no functions 
+     *     are supported for this invocation.
+     * @return the expression String evaluated to the given expected
+     * type
+     **/
+  public Object evaluate (String pExpressionString,
 		   Class pExpectedType,
 		   VariableResolver pResolver,
-		   FunctionMapper functions,
-		   Logger pLogger)
+		   FunctionMapper functions)
     throws ELException
   {
     // Check for null expression strings
@@ -253,31 +236,22 @@ public class ExpressionEvaluatorImpl
     if (parsedValue instanceof String) {
       // Convert the String, and cache the conversion
       String strValue = (String) parsedValue;
-      return convertStaticValueToExpectedType (strValue, 
-					       pExpectedType, 
-					       pLogger);
+      return convertStaticValueToExpectedType (strValue, pExpectedType);
     }
 
     else if (parsedValue instanceof Expression) {
       // Evaluate the expression and convert
       Object value = 
 	((Expression) parsedValue).evaluate (pResolver,
-					     functions,
-					     pLogger);
-      return convertToExpectedType (value, 
-				    pExpectedType,
-				    pLogger);
+					     functions);
+      return convertToExpectedType (value, pExpectedType);
     }
 
     else if (parsedValue instanceof ExpressionString) {
       // Evaluate the expression/string list and convert
       String strValue = 
-	((ExpressionString) parsedValue).evaluate (pResolver,
-						   functions,
-						   pLogger);
-      return convertToExpectedType (strValue,
-				    pExpectedType,
-				    pLogger);
+	((ExpressionString) parsedValue).evaluate (pResolver, functions);
+      return convertToExpectedType (strValue, pExpectedType);
     }
 
     else {
@@ -338,13 +312,10 @@ public class ExpressionEvaluatorImpl
    * Converts the given value to the specified expected type.
    **/
   Object convertToExpectedType (Object pValue,
-				Class pExpectedType,
-				Logger pLogger)
+				Class pExpectedType)
     throws ELException
   {
-    return Coercions.coerce (pValue,
-			     pExpectedType,
-			     pLogger);
+    return Coercions.coerce (pValue, pExpectedType);
   }
 
   //-------------------------------------
@@ -353,9 +324,7 @@ public class ExpressionEvaluatorImpl
    * Converts the given String, specified as a static expression
    * string, to the given expected type.  The conversion is cached.
    **/
-  Object convertStaticValueToExpectedType (String pValue,
-					   Class pExpectedType,
-					   Logger pLogger)
+  Object convertStaticValueToExpectedType (String pValue, Class pExpectedType)
     throws ELException
   {
     // See if the value is already of the expected type
@@ -372,7 +341,7 @@ public class ExpressionEvaluatorImpl
     }
     else {
       // Convert from a String
-      Object ret = Coercions.coerce (pValue, pExpectedType, pLogger);
+      Object ret = Coercions.coerce (pValue, pExpectedType);
       valueByString.put (pValue, ret);
       return ret;
     }

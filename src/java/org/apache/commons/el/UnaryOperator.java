@@ -90,8 +90,7 @@ public abstract class UnaryOperator
    *
    * Applies the operator to the given value
    **/
-  public abstract Object apply (Object pValue,
-				Logger pLogger)
+  public abstract Object apply (Object pValue)
     throws ELException;
 
   //-------------------------------------

@@ -104,8 +104,7 @@ public class EmptyOperator
    *
    * Applies the operator to the given value
    **/
-  public Object apply (Object pValue,
-		       Logger pLogger)
+  public Object apply (Object pValue)
     throws ELException
   {
     // See if the value is null

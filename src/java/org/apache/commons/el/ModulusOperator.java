@@ -55,6 +55,9 @@
 
 package org.apache.commons.el;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import javax.servlet.jsp.el.ELException;
 import java.math.BigInteger;
 
@@ -69,6 +72,12 @@ import java.math.BigInteger;
 public class ModulusOperator
   extends BinaryOperator
 {
+    
+    //-------------------------------------
+    // Constants
+    //-------------------------------------
+    private static Log log = LogFactory.getLog(ModulusOperator.class);
+    
   //-------------------------------------
   // Singleton
   //-------------------------------------
@@ -102,18 +111,16 @@ public class ModulusOperator
    *
    * Applies the operator to the given value
    **/
-  public Object apply (Object pLeft,
-		       Object pRight,
-		       Logger pLogger)
+  public Object apply (Object pLeft, Object pRight)
     throws ELException
   {
     if (pLeft == null &&
 	pRight == null) {
-      if (pLogger.isLoggingWarning ()) {
-	pLogger.logWarning
-	  (Constants.ARITH_OP_NULL,
-	   getOperatorSymbol ());
-      }
+        if (log.isWarnEnabled()) {
+            log.warn(
+                MessageUtil.getMessageWithArgs(
+                    Constants.ARITH_OP_NULL, getOperatorSymbol()));
+        }     
       return PrimitiveObjects.getInteger (0);
     }
 
@@ -126,64 +133,67 @@ public class ModulusOperator
 	  Coercions.isFloatingPointString (pRight) ||
       Coercions.isBigDecimal(pRight)))) {
       double left =
-	Coercions.coerceToPrimitiveNumber (pLeft, Double.class, pLogger).
+	Coercions.coerceToPrimitiveNumber (pLeft, Double.class).
 	doubleValue ();
       double right =
-	Coercions.coerceToPrimitiveNumber (pRight, Double.class, pLogger).
+	Coercions.coerceToPrimitiveNumber (pRight, Double.class).
 	doubleValue ();
 
       try {
 	return PrimitiveObjects.getDouble (left % right);
       }
       catch (Exception exc) {
-	if (pLogger.isLoggingError ()) {
-	  pLogger.logError
-	    (Constants.ARITH_ERROR,
-	     getOperatorSymbol (),
-	     "" + left,
-	     "" + right);
-	}
+          if (log.isErrorEnabled()) {
+              log.error(
+                  MessageUtil.getMessageWithArgs(
+                      Constants.ARITH_ERROR,
+                      getOperatorSymbol(),
+                      "" + left,
+                      "" + right));
+          }	
 	return PrimitiveObjects.getInteger (0);
       }
     }
     else if (Coercions.isBigInteger(pLeft) || Coercions.isBigInteger(pRight)) {
         BigInteger left = (BigInteger)
-             Coercions.coerceToPrimitiveNumber(pLeft, BigInteger.class, pLogger);
+             Coercions.coerceToPrimitiveNumber(pLeft, BigInteger.class);
         BigInteger right = (BigInteger)
-            Coercions.coerceToPrimitiveNumber(pRight, BigInteger.class, pLogger);
+            Coercions.coerceToPrimitiveNumber(pRight, BigInteger.class);
 
         try {
             return left.remainder(right);
         } catch (Exception exc) {
-            if (pLogger.isLoggingError()) {
-                pLogger.logError
-                    (Constants.ARITH_ERROR,
+            if (log.isErrorEnabled()) {
+                log.error(
+                    MessageUtil.getMessageWithArgs(
+                        Constants.ARITH_ERROR,
                         getOperatorSymbol(),
                         "" + left,
-                        "" + right);
-            }
+                        "" + right));
+            }	           
             return PrimitiveObjects.getInteger(0);
         }
     }
     else {
       long left =
-	Coercions.coerceToPrimitiveNumber (pLeft, Long.class, pLogger).
+	Coercions.coerceToPrimitiveNumber (pLeft, Long.class).
 	longValue ();
       long right =
-	Coercions.coerceToPrimitiveNumber (pRight, Long.class, pLogger).
+	Coercions.coerceToPrimitiveNumber (pRight, Long.class).
 	longValue ();
 
       try {
 	return PrimitiveObjects.getLong (left % right);
       }
       catch (Exception exc) {
-	if (pLogger.isLoggingError ()) {
-	  pLogger.logError
-	    (Constants.ARITH_ERROR,
-	     getOperatorSymbol (),
-	     "" + left,
-	     "" + right);
-	}
+          if (log.isErrorEnabled()) {
+              log.error(
+                  MessageUtil.getMessageWithArgs(
+                      Constants.ARITH_ERROR,
+                      getOperatorSymbol(),
+                      "" + left,
+                      "" + right));
+          }		
 	return PrimitiveObjects.getInteger (0);
       }
     }

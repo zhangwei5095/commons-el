@@ -112,9 +112,7 @@ public class NamedValue
    *
    * Evaluates by looking up the name in the VariableResolver
    **/
-  public Object evaluate (VariableResolver pResolver,
-			  FunctionMapper functions,
-			  Logger pLogger)
+  public Object evaluate (VariableResolver pResolver, FunctionMapper functions)
     throws ELException
   {
     if (pResolver == null) {

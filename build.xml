@@ -3,7 +3,7 @@
 
 <!--
         "Expression Language" component of the Jakarta Commons Subproject
-        $Id: build.xml,v 1.7 2003/06/19 21:40:47 luehe Exp $
+        $Id: build.xml,v 1.8 2003/07/31 02:01:07 luehe Exp $
 -->
 
 
@@ -89,6 +89,7 @@
     <pathelement location="${build.home}/classes"/>
     <pathelement location="${servlet-api.jar}"/>
     <pathelement location="${jsp-api.jar}"/>
+    <pathelement location="${commons.logging.jar}"/>
   </path>
 
 

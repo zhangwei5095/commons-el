@@ -77,12 +77,10 @@ public abstract class RelationalOperator
    *
    * Applies the operator to the given value
    **/
-  public Object apply (Object pLeft,
-		       Object pRight,
-		       Logger pLogger)
+  public Object apply (Object pLeft, Object pRight)
     throws ELException
   {
-    return Coercions.applyRelationalOperator (pLeft, pRight, this, pLogger);
+    return Coercions.applyRelationalOperator (pLeft, pRight, this);
   }
 
   //-------------------------------------

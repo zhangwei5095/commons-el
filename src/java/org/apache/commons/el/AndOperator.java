@@ -102,15 +102,14 @@ public class AndOperator
    * Applies the operator to the given value
    **/
   public Object apply (Object pLeft,
-		       Object pRight,
-		       Logger pLogger)
+		       Object pRight)
     throws ELException
   {
     // Coerce the values to booleans
     boolean left = 
-      Coercions.coerceToBoolean (pLeft, pLogger).booleanValue ();
+      Coercions.coerceToBoolean (pLeft).booleanValue ();
     boolean right = 
-      Coercions.coerceToBoolean (pRight, pLogger).booleanValue ();
+      Coercions.coerceToBoolean (pRight).booleanValue ();
 
     return PrimitiveObjects.getBoolean (left && right);
   }

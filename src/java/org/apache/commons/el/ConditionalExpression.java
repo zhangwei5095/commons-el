@@ -139,20 +139,19 @@ public class ConditionalExpression
    * Evaluates the conditional expression and returns the literal result
    **/
   public Object evaluate (VariableResolver vr,
-			  FunctionMapper f,
-			  Logger l)
+			  FunctionMapper f)
     throws ELException
   {
     // first, evaluate the condition (and coerce the result to a boolean value)
     boolean condition =
       Coercions.coerceToBoolean(
-        mCondition.evaluate(vr, f, l), l).booleanValue();
+        mCondition.evaluate(vr, f)).booleanValue();
 
     // then, use this boolean to branch appropriately
     if (condition)
-      return mTrueBranch.evaluate(vr, f, l);
+      return mTrueBranch.evaluate(vr, f);
     else
-      return mFalseBranch.evaluate(vr, f, l);
+      return mFalseBranch.evaluate(vr, f);
   }
 
   //-------------------------------------

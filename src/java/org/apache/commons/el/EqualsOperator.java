@@ -100,8 +100,7 @@ public class EqualsOperator
    * Applies the operator given the fact that the two elements are
    * equal.
    **/
-  public boolean apply (boolean pAreEqual,
-			Logger pLogger)
+  public boolean apply (boolean pAreEqual)
   {
     return pAreEqual;
   }

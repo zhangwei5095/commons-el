@@ -148,19 +148,17 @@ public class UnaryOperatorExpression
    *
    * Evaluates to the literal value
    **/
-  public Object evaluate (VariableResolver pResolver,
-			  FunctionMapper functions,
-			  Logger pLogger)
+  public Object evaluate (VariableResolver pResolver, FunctionMapper functions)
     throws ELException
   {
-    Object value = mExpression.evaluate (pResolver, functions, pLogger);
+    Object value = mExpression.evaluate (pResolver, functions);
     if (mOperator != null) {
-      value = mOperator.apply (value, pLogger);
+      value = mOperator.apply (value);
     }
     else {
       for (int i = mOperators.size () - 1; i >= 0; i--) {
 	UnaryOperator operator = (UnaryOperator) mOperators.get (i);
-	value = operator.apply (value, pLogger);
+	value = operator.apply (value);
       }
     }
     return value;

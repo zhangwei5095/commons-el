@@ -55,6 +55,9 @@
 
 package org.apache.commons.el;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
@@ -73,6 +76,11 @@ import javax.servlet.jsp.el.FunctionMapper;
 public class FunctionInvocation
   extends Expression
 {
+    //-------------------------------------
+    // Constants
+    //-------------------------------------
+    private static Log log = LogFactory.getLog(FunctionInvocation.class);
+    
   //-------------------------------------
   // Properties
   //-------------------------------------
@@ -123,14 +131,18 @@ public class FunctionInvocation
    * Evaluates by looking up the name in the VariableResolver
    **/
   public Object evaluate (VariableResolver pResolver,
-			  FunctionMapper functions,
-                          Logger pLogger)
+			  FunctionMapper functions)
     throws ELException
   {
 
     // if the Map is null, then the function is invalid
-    if (functions == null)
-      pLogger.logError(Constants.UNKNOWN_FUNCTION, functionName);
+    if (functions == null) {
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.UNKNOWN_FUNCTION, functionName));
+        }
+    }            
 
     // normalize function name
     String prefix = null;
@@ -146,37 +158,54 @@ public class FunctionInvocation
 
     // ensure that the function's name is mapped
     Method target = (Method) functions.resolveFunction(prefix, localName);
-    if (target == null)
-      pLogger.logError(Constants.UNKNOWN_FUNCTION, functionName);
+    if (target == null) {
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.UNKNOWN_FUNCTION, functionName));
+        }
+    }      
 
     // ensure that the number of arguments matches the number of parameters
     Class[] params = target.getParameterTypes();
-    if (params.length != argumentList.size())
-      pLogger.logError(Constants.INAPPROPRIATE_FUNCTION_ARG_COUNT,
-		       functionName, new Integer(params.length),
-		       new Integer(argumentList.size()));
+    if (params.length != argumentList.size()) {
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.INAPPROPRIATE_FUNCTION_ARG_COUNT,
+                    functionName, new Integer(params.length),
+                    new Integer(argumentList.size())));
+        }      
+    }
 
     // now, walk through each parameter, evaluating and casting its argument
     Object[] arguments = new Object[argumentList.size()];
     for (int i = 0; i < params.length; i++) {
       // evaluate
       arguments[i] = ((Expression) argumentList.get(i)).evaluate(pResolver,
-								 functions,
-								 pLogger);
+								 functions);
       // coerce
-      arguments[i] = Coercions.coerce(arguments[i], params[i], pLogger);
+      arguments[i] = Coercions.coerce(arguments[i], params[i]);
     }
 
     // finally, invoke the target method, which we know to be static
     try {
       return (target.invoke(null, arguments));
     } catch (InvocationTargetException ex) {
-      pLogger.logError(Constants.FUNCTION_INVOCATION_ERROR,
-			ex.getTargetException(),
-			functionName);
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.FUNCTION_INVOCATION_ERROR,
+                    functionName), ex.getTargetException());
+        }      
       return null;
     } catch (Exception ex) {
-      pLogger.logError(Constants.FUNCTION_INVOCATION_ERROR, ex, functionName);
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.FUNCTION_INVOCATION_ERROR,
+                    functionName), ex);    
+        }      
       return null;
     }
   }

@@ -91,8 +91,7 @@ public abstract class BinaryOperator
    * Applies the operator to the given pair of values
    **/
   public abstract Object apply (Object pLeft,
-				Object pRight,
-				Logger pLogger)
+				Object pRight)
     throws ELException;
 
   //-------------------------------------

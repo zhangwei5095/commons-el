@@ -55,6 +55,9 @@
 
 package org.apache.commons.el;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.beans.BeanInfo;
 import java.beans.EventSetDescriptor;
 import java.beans.IndexedPropertyDescriptor;
@@ -83,6 +86,11 @@ import javax.servlet.jsp.el.ELException;
 
 public class BeanInfoManager
 {
+    //-------------------------------------
+    // Constants
+    //-------------------------------------
+    private static Log log = LogFactory.getLog(BeanInfoManager.class);
+    
   //-------------------------------------
   // Properties
   //-------------------------------------
@@ -172,11 +180,10 @@ public class BeanInfoManager
    **/
   public static BeanInfoProperty getBeanInfoProperty
     (Class pClass,
-     String pPropertyName,
-     Logger pLogger)
+     String pPropertyName)
     throws ELException
   {
-    return getBeanInfoManager (pClass).getProperty (pPropertyName, pLogger);
+    return getBeanInfoManager (pClass).getProperty (pPropertyName);
   }
 
   //-------------------------------------
@@ -187,12 +194,11 @@ public class BeanInfoManager
    **/
   public static BeanInfoIndexedProperty getBeanInfoIndexedProperty
     (Class pClass,
-     String pIndexedPropertyName,
-     Logger pLogger)
+     String pIndexedPropertyName)
     throws ELException
   {
     return getBeanInfoManager 
-      (pClass).getIndexedProperty (pIndexedPropertyName, pLogger);
+      (pClass).getIndexedProperty (pIndexedPropertyName);
   }
 
   //-------------------------------------
@@ -201,13 +207,13 @@ public class BeanInfoManager
    * Makes sure that this class has been initialized, and synchronizes
    * the initialization if it's required.
    **/
-  void checkInitialized (Logger pLogger)
+  void checkInitialized ()
     throws ELException
   {
     if (!mInitialized) {
       synchronized (this) {
 	if (!mInitialized) {
-	  initialize (pLogger);
+	  initialize();
 	  mInitialized = true;
 	}
       }
@@ -219,7 +225,7 @@ public class BeanInfoManager
    *
    * Initializes by mapping property names to BeanInfoProperties
    **/
-  void initialize (Logger pLogger)
+  void initialize ()
     throws ELException
   {
     try {
@@ -261,12 +267,11 @@ public class BeanInfoManager
       }
     }
     catch (IntrospectionException exc) {
-      if (pLogger.isLoggingWarning ()) {
-	pLogger.logWarning
-	  (Constants.EXCEPTION_GETTING_BEANINFO,
-	   exc,
-	   mBeanClass.getName ());
-      }
+        if (log.isWarnEnabled()) {
+            log.warn(
+                MessageUtil.getMessageWithArgs(
+                    Constants.EXCEPTION_GETTING_BEANINFO, mBeanClass.getName()), exc);
+        }     
     }
   }
 
@@ -275,10 +280,10 @@ public class BeanInfoManager
    *
    * Returns the BeanInfo for the class
    **/
-  BeanInfo getBeanInfo (Logger pLogger)
+  BeanInfo getBeanInfo ()
     throws ELException
   {
-    checkInitialized (pLogger);
+    checkInitialized();
     return mBeanInfo;
   }
 
@@ -288,11 +293,10 @@ public class BeanInfoManager
    * Returns the BeanInfoProperty for the given property name, or null
    * if not found.
    **/
-  public BeanInfoProperty getProperty (String pPropertyName,
-				       Logger pLogger)
+  public BeanInfoProperty getProperty (String pPropertyName)
     throws ELException
   {
-    checkInitialized (pLogger);
+    checkInitialized();
     return (BeanInfoProperty) mPropertyByName.get (pPropertyName);
   }
 
@@ -303,11 +307,10 @@ public class BeanInfoManager
    * or null if not found.
    **/
   public BeanInfoIndexedProperty getIndexedProperty 
-    (String pIndexedPropertyName,
-     Logger pLogger)
+    (String pIndexedPropertyName)
     throws ELException
   {
-    checkInitialized (pLogger);
+    checkInitialized();
     return (BeanInfoIndexedProperty) 
       mIndexedPropertyByName.get (pIndexedPropertyName);
   }
@@ -318,11 +321,10 @@ public class BeanInfoManager
    * Returns the EventSetDescriptor for the given event set name, or
    * null if not found.
    **/
-  public EventSetDescriptor getEventSet (String pEventSetName,
-					 Logger pLogger)
+  public EventSetDescriptor getEventSet (String pEventSetName)
     throws ELException
   {
-    checkInitialized (pLogger);
+    checkInitialized();
     return (EventSetDescriptor) mEventSetByName.get (pEventSetName);
   }
 

@@ -100,8 +100,7 @@ public class ExpressionString
    * and concatenating the results into a single String.
    **/
   public String evaluate (VariableResolver pResolver,
-			  FunctionMapper functions,
-			  Logger pLogger)
+			  FunctionMapper functions)
     throws ELException
   {
     StringBuffer buf = new StringBuffer ();
@@ -112,9 +111,7 @@ public class ExpressionString
       }
       else if (elem instanceof Expression) {
 	Object val = 
-	  ((Expression) elem).evaluate (pResolver,
-					functions,
-					pLogger);
+	  ((Expression) elem).evaluate (pResolver, functions);
 	if (val != null) {
 	  buf.append (val.toString ());
 	}

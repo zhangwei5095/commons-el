@@ -147,27 +147,25 @@ public class BinaryOperatorExpression
    * Evaluates to the literal value
    **/
   public Object evaluate (VariableResolver pResolver,
-			  FunctionMapper functions,
-			  Logger pLogger)
+			  FunctionMapper functions)
     throws ELException
   {
-    Object value = mExpression.evaluate (pResolver, functions, pLogger);
+    Object value = mExpression.evaluate (pResolver, functions);
     for (int i = 0; i < mOperators.size (); i++) {
       BinaryOperator operator = (BinaryOperator) mOperators.get (i);
 
       // For the And/Or operators, we need to coerce to a boolean
       // before testing if we shouldEvaluate
       if (operator.shouldCoerceToBoolean ()) {
-	value = Coercions.coerceToBoolean (value, pLogger);
+	value = Coercions.coerceToBoolean (value);
       }
 
       if (operator.shouldEvaluate (value)) {
 	Expression expression = (Expression) mExpressions.get (i);
 	Object nextValue = expression.evaluate (pResolver,
-						functions,
-						pLogger);
+						functions);
 
-	value = operator.apply (value, nextValue, pLogger);
+	value = operator.apply (value, nextValue);
       }
     }
     return value;

@@ -74,11 +74,10 @@ public abstract class EqualityOperator
    * Applies the operator to the given value
    **/
   public Object apply (Object pLeft,
-		       Object pRight,
-		       Logger pLogger)
+		       Object pRight)
     throws ELException
   {
-    return Coercions.applyEqualityOperator (pLeft, pRight, this, pLogger);
+    return Coercions.applyEqualityOperator (pLeft, pRight, this);
   }
 
   //-------------------------------------
@@ -87,8 +86,7 @@ public abstract class EqualityOperator
    * Applies the operator given the fact that the two elements are
    * equal.
    **/
-  public abstract boolean apply (boolean pAreEqual,
-				 Logger pLogger);
+  public abstract boolean apply (boolean pAreEqual);
   
   //-------------------------------------
 }

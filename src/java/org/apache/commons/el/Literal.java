@@ -100,9 +100,7 @@ public abstract class Literal
    *
    * Evaluates to the literal value
    **/
-  public Object evaluate (VariableResolver pResolver,
-			  FunctionMapper functions,
-			  Logger pLogger)
+  public Object evaluate (VariableResolver pResolver, FunctionMapper functions)
     throws ELException
   {
     return mValue;

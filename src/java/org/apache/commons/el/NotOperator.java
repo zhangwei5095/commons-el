@@ -101,12 +101,11 @@ public class NotOperator
    *
    * Applies the operator to the given value
    **/
-  public Object apply (Object pValue,
-		       Logger pLogger)
+  public Object apply (Object pValue)
     throws ELException
   {
     // Coerce the value to a boolean
-    boolean val = Coercions.coerceToBoolean (pValue, pLogger).booleanValue ();
+    boolean val = Coercions.coerceToBoolean (pValue).booleanValue ();
 
     return PrimitiveObjects.getBoolean (!val);
   }

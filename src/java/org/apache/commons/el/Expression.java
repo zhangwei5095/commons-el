@@ -88,9 +88,7 @@ public abstract class Expression
    *
    * Evaluates the expression in the given context
    **/
-  public abstract Object evaluate (VariableResolver pResolver,
-				   FunctionMapper functions,
-				   Logger pLogger)
+  public abstract Object evaluate (VariableResolver pResolver, FunctionMapper functions)
     throws ELException;
 
   //-------------------------------------

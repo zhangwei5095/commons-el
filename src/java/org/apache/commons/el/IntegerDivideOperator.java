@@ -55,6 +55,9 @@
 
 package org.apache.commons.el;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import javax.servlet.jsp.el.ELException;
 
 /**
@@ -68,6 +71,11 @@ import javax.servlet.jsp.el.ELException;
 public class IntegerDivideOperator
   extends BinaryOperator
 {
+    //-------------------------------------
+    // Constants
+    //-------------------------------------
+    private static Log log = LogFactory.getLog(IntegerDivideOperator.class);
+    
   //-------------------------------------
   // Singleton
   //-------------------------------------
@@ -101,39 +109,39 @@ public class IntegerDivideOperator
    *
    * Applies the operator to the given value
    **/
-  public Object apply (Object pLeft,
-		       Object pRight,
-		       Logger pLogger)
+  public Object apply (Object pLeft, Object pRight)
     throws ELException
   {
     if (pLeft == null &&
 	pRight == null) {
-      if (pLogger.isLoggingWarning ()) {
-	pLogger.logWarning
-	  (Constants.ARITH_OP_NULL,
-	   getOperatorSymbol ());
-      }
+        if (log.isWarnEnabled()) {
+            log.warn(
+                MessageUtil.getMessageWithArgs(
+                    Constants.ARITH_OP_NULL, 
+                    getOperatorSymbol()));
+        }     
       return PrimitiveObjects.getInteger (0);
     }
 
     long left =
-      Coercions.coerceToPrimitiveNumber (pLeft, Long.class, pLogger).
+      Coercions.coerceToPrimitiveNumber (pLeft, Long.class).
       longValue ();
     long right =
-      Coercions.coerceToPrimitiveNumber (pRight, Long.class, pLogger).
+      Coercions.coerceToPrimitiveNumber (pRight, Long.class).
       longValue ();
 
     try {
       return PrimitiveObjects.getLong (left / right);
     }
     catch (Exception exc) {
-      if (pLogger.isLoggingError ()) {
-	pLogger.logError
-	  (Constants.ARITH_ERROR,
-	   getOperatorSymbol (),
-	   "" + left,
-	   "" + right);
-      }
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.ARITH_ERROR,
+                    getOperatorSymbol(),
+                    "" + left,
+                    "" + right));
+        }    
       return PrimitiveObjects.getInteger (0);
     }
   }

@@ -103,9 +103,7 @@ public class PropertySuffix
    *
    * Gets the value of the index
    **/
-  Object evaluateIndex (VariableResolver pResolver,
-                        FunctionMapper functions,
-                        Logger pLogger)
+  Object evaluateIndex (VariableResolver pResolver, FunctionMapper functions)
     throws ELException
   {
     return mName;

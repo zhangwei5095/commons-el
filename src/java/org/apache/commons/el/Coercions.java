@@ -55,6 +55,9 @@
 
 package org.apache.commons.el;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
 import java.math.BigInteger;
@@ -314,33 +317,37 @@ import javax.servlet.jsp.el.ELException;
 
 public class Coercions
 {
+    //-------------------------------------
+    // Constants
+    //-------------------------------------
    private static final Number ZERO = new Integer(0);
+    private static Log log = LogFactory.getLog(Coercions.class);
+    
   //-------------------------------------
   /**
    *
    * Coerces the given value to the specified class.
    **/
   public static Object coerce (Object pValue,
-			       Class pClass,
-			       Logger pLogger)
+			       Class pClass)
     throws ELException
   {
     if (pClass == String.class) {
-      return coerceToString (pValue, pLogger);
+      return coerceToString (pValue);
     }
     else if (isNumberClass (pClass)) {
-      return coerceToPrimitiveNumber (pValue, pClass, pLogger);
+      return coerceToPrimitiveNumber (pValue, pClass);
     }
     else if (pClass == Character.class ||
 	     pClass == Character.TYPE) {
-      return coerceToCharacter (pValue, pLogger);
+      return coerceToCharacter (pValue);
     }
     else if (pClass == Boolean.class ||
 	     pClass == Boolean.TYPE) {
-      return coerceToBoolean (pValue, pLogger);
+      return coerceToBoolean (pValue);
     }
     else {
-      return coerceToObject (pValue, pClass, pLogger);
+      return coerceToObject (pValue, pClass);
     }
   }
 
@@ -374,8 +381,7 @@ public class Coercions
    *
    * Coerces the specified value to a String
    **/
-  public static String coerceToString (Object pValue,
-				       Logger pLogger)
+  public static String coerceToString (Object pValue)
     throws ELException
   {
     if (pValue == null) {
@@ -389,12 +395,12 @@ public class Coercions
 	return pValue.toString ();
       }
       catch (Exception exc) {
-	if (pLogger.isLoggingError ()) {
-	  pLogger.logError (Constants.TOSTRING_EXCEPTION,
-			    exc,
-			    pValue.getClass ().getName ());
-	}
-	return "";
+          if (log.isErrorEnabled()) {
+              log.error(
+                  MessageUtil.getMessageWithArgs(Constants.TOSTRING_EXCEPTION, 
+                                                 pValue.getClass().getName()), exc);
+          }
+          return "";	
       }
     }
   }
@@ -405,8 +411,7 @@ public class Coercions
    * Coerces a value to the given primitive number class
    **/
   public static Number coerceToPrimitiveNumber (Object pValue,
-						Class pClass,
-						Logger pLogger)
+						Class pClass)
     throws ELException
   {
     if (pValue == null ||
@@ -418,12 +423,12 @@ public class Coercions
       return coerceToPrimitiveNumber (new Short((short) val), pClass);
     }
     else if (pValue instanceof Boolean) {
-      if (pLogger.isLoggingError ()) {
-	pLogger.logError (Constants.BOOLEAN_TO_NUMBER,
-			  pValue,
-			  pClass.getName ());
-      }
-      return coerceToPrimitiveNumber (ZERO, pClass);
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.BOOLEAN_TO_NUMBER, pValue, pClass.getName()));
+        }
+        return coerceToPrimitiveNumber(ZERO, pClass);     
     }
     else if (pValue.getClass () == pClass) {
       return (Number) pValue;
@@ -436,22 +441,23 @@ public class Coercions
 	return coerceToPrimitiveNumber ((String) pValue, pClass);
       }
       catch (Exception exc) {
-	if (pLogger.isLoggingError ()) {
-	  pLogger.logError
-	    (Constants.STRING_TO_NUMBER_EXCEPTION,
-	     (String) pValue,
-	     pClass.getName ());
-	}
-	return coerceToPrimitiveNumber (ZERO, pClass);
+          if (log.isErrorEnabled()) {
+              log.error(
+                  MessageUtil.getMessageWithArgs(
+                      Constants.STRING_TO_NUMBER_EXCEPTION, 
+                      (String) pValue, pClass.getName()));
+          }	
+	    return coerceToPrimitiveNumber (ZERO, pClass);
       }
     }
     else {
-      if (pLogger.isLoggingError ()) {
-	pLogger.logError
-	  (Constants.COERCE_TO_NUMBER,
-	   pValue.getClass ().getName (),
-	   pClass.getName ());
-      }
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.COERCE_TO_NUMBER,
+                    pValue.getClass().getName(),
+                    pClass.getName()));
+        }      
       return coerceToPrimitiveNumber (0, pClass);
     }
   }
@@ -462,8 +468,7 @@ public class Coercions
    * Coerces a value to an Integer, returning null if the coercion
    * isn't possible.
    **/
-  public static Integer coerceToInteger (Object pValue,
-					 Logger pLogger)
+  public static Integer coerceToInteger (Object pValue)
     throws ELException
   {
     if (pValue == null) {
@@ -474,11 +479,11 @@ public class Coercions
 	((int) (((Character) pValue).charValue ()));
     }
     else if (pValue instanceof Boolean) {
-      if (pLogger.isLoggingWarning ()) {
-	pLogger.logWarning (Constants.BOOLEAN_TO_NUMBER,
-			    pValue,
-			    Integer.class.getName ());
-      }
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.BOOLEAN_TO_NUMBER, pValue, Integer.class.getName()));            
+        }     
       return PrimitiveObjects.getInteger
 	(((Boolean) pValue).booleanValue () ? 1 : 0);
     }
@@ -493,22 +498,24 @@ public class Coercions
 	return Integer.valueOf ((String) pValue);
       }
       catch (Exception exc) {
-	if (pLogger.isLoggingWarning ()) {
-	  pLogger.logWarning
-	    (Constants.STRING_TO_NUMBER_EXCEPTION,
-	     (String) pValue,
-	     Integer.class.getName ());
-	}
+          if (log.isErrorEnabled()) {
+              log.error(
+                  MessageUtil.getMessageWithArgs(
+                      Constants.STRING_TO_NUMBER_EXCEPTION,
+                      (String) pValue,
+                      Integer.class.getName()));            
+          }	
 	return null;
       }
     }
     else {
-      if (pLogger.isLoggingWarning ()) {
-	pLogger.logWarning
-	  (Constants.COERCE_TO_NUMBER,
-	   pValue.getClass ().getName (),
-	   Integer.class.getName ());
-      }
+        if (log.isWarnEnabled()) {
+            log.warn(
+                MessageUtil.getMessageWithArgs(
+                    Constants.COERCE_TO_NUMBER,
+                    pValue.getClass().getName(),
+                    Integer.class.getName()));
+        }
       return null;
     }
   }
@@ -582,8 +589,7 @@ public class Coercions
    *
    * Coerces a Number to the given primitive number class
    **/
-  static Number coerceToPrimitiveNumber (Number pValue,
-					 Class pClass)
+  static Number coerceToPrimitiveNumber (Number pValue, Class pClass)
     throws ELException
   {
     if (pClass == Byte.class || pClass == Byte.TYPE) {
@@ -626,8 +632,7 @@ public class Coercions
    *
    * Coerces a String to the given primitive number class
    **/
-  static Number coerceToPrimitiveNumber (String pValue,
-					 Class pClass)
+  static Number coerceToPrimitiveNumber (String pValue, Class pClass)
     throws ELException
   {
     if (pClass == Byte.class || pClass == Byte.TYPE) {
@@ -664,8 +669,7 @@ public class Coercions
    *
    * Coerces a value to a Character
    **/
-  public static Character coerceToCharacter (Object pValue,
-					     Logger pLogger)
+  public static Character coerceToCharacter (Object pValue)
     throws ELException
   {
     if (pValue == null ||
@@ -676,9 +680,11 @@ public class Coercions
       return (Character) pValue;
     }
     else if (pValue instanceof Boolean) {
-      if (pLogger.isLoggingError ()) {
-	pLogger.logError (Constants.BOOLEAN_TO_CHARACTER, pValue);
-      }
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.BOOLEAN_TO_CHARACTER, pValue));
+        }     
       return PrimitiveObjects.getCharacter ((char) 0);
     }
     else if (pValue instanceof Number) {
@@ -690,11 +696,12 @@ public class Coercions
       return PrimitiveObjects.getCharacter (str.charAt (0));
     }
     else {
-      if (pLogger.isLoggingError ()) {
-	pLogger.logError
-	  (Constants.COERCE_TO_CHARACTER,
-	   pValue.getClass ().getName ());
-      }
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.COERCE_TO_CHARACTER,
+                    pValue.getClass().getName()));
+        }     
       return PrimitiveObjects.getCharacter ((char) 0);
     }
   }
@@ -704,8 +711,7 @@ public class Coercions
    *
    * Coerces a value to a Boolean
    **/
-  public static Boolean coerceToBoolean (Object pValue,
-					 Logger pLogger)
+  public static Boolean coerceToBoolean (Object pValue)
     throws ELException
   {
     if (pValue == null ||
@@ -721,21 +727,21 @@ public class Coercions
 	return Boolean.valueOf (str);
       }
       catch (Exception exc) {
-	if (pLogger.isLoggingError ()) {
-	  pLogger.logError
-	    (Constants.STRING_TO_BOOLEAN,
-	     exc,
-	     (String) pValue);
-	}
+          if (log.isErrorEnabled()) {
+              log.error(
+                  MessageUtil.getMessageWithArgs(
+                      Constants.STRING_TO_BOOLEAN, (String) pValue), exc);
+          }	
 	return Boolean.FALSE;
       }
     }
     else {
-      if (pLogger.isLoggingError ()) {
-	pLogger.logError
-	  (Constants.COERCE_TO_BOOLEAN,
-	   pValue.getClass ().getName ());
-      }
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.COERCE_TO_BOOLEAN,
+                    pValue.getClass().getName()));
+        }     
       return Boolean.TRUE;
     }
   }
@@ -746,9 +752,7 @@ public class Coercions
    * Coerces a value to the specified Class that is not covered by any
    * of the above cases
    **/
-  public static Object coerceToObject (Object pValue,
-				       Class pClass,
-				       Logger pLogger)
+  public static Object coerceToObject (Object pValue, Class pClass)
     throws ELException
   {
     if (pValue == null) {
@@ -765,12 +769,12 @@ public class Coercions
 	  return null;
 	}
 	else {
-	  if (pLogger.isLoggingError ()) {
-	    pLogger.logError
-	      (Constants.NO_PROPERTY_EDITOR,
-	       str,
-	       pClass.getName ());
-	  }
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.NO_PROPERTY_EDITOR,
+                    str, pClass.getName()));            
+        }	  
 	  return null;
 	}
       }
@@ -783,24 +787,25 @@ public class Coercions
 	  return null;
 	}
 	else {
-	  if (pLogger.isLoggingError ()) {
-	    pLogger.logError
-	      (Constants.PROPERTY_EDITOR_ERROR,
-	       exc,
-	       pValue,
-	       pClass.getName ());
-	  }
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.PROPERTY_EDITOR_ERROR,
+                    pValue,
+                    pClass.getName()), exc);
+        }	  
 	  return null;
 	}
       }
     }
     else {
-      if (pLogger.isLoggingError ()) {
-	pLogger.logError
-	  (Constants.COERCE_TO_OBJECT,
-	   pValue.getClass ().getName (),
-	   pClass.getName ());
-      }
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.COERCE_TO_OBJECT,
+                    pValue.getClass().getName(),
+                    pClass.getName()));
+        }     
       return null;
     }
   }
@@ -816,25 +821,25 @@ public class Coercions
   public static Object applyArithmeticOperator 
     (Object pLeft,
      Object pRight,
-     ArithmeticOperator pOperator,
-     Logger pLogger)
+     ArithmeticOperator pOperator)
     throws ELException
   {
     if (pLeft == null &&
 	pRight == null) {
-      if (pLogger.isLoggingWarning ()) {
-	pLogger.logWarning
-	  (Constants.ARITH_OP_NULL,
-	   pOperator.getOperatorSymbol ());
-      }
+        if (log.isWarnEnabled()) {
+            log.warn(
+                MessageUtil.getMessageWithArgs(
+                    Constants.ARITH_OP_NULL,
+                    pOperator.getOperatorSymbol()));
+        }    
       return PrimitiveObjects.getInteger (0);
     }
 
     else if (isBigDecimal(pLeft) || isBigDecimal(pRight)) {
         BigDecimal left = (BigDecimal)
-            coerceToPrimitiveNumber(pLeft, BigDecimal.class, pLogger);
+            coerceToPrimitiveNumber(pLeft, BigDecimal.class);
         BigDecimal right = (BigDecimal)
-            coerceToPrimitiveNumber(pRight, BigDecimal.class, pLogger);
+            coerceToPrimitiveNumber(pRight, BigDecimal.class);
         return pOperator.apply(left, right);
     }
 
@@ -844,16 +849,16 @@ public class Coercions
         isFloatingPointString(pRight)) {
         if (isBigInteger(pLeft) || isBigInteger(pRight)) {
             BigDecimal left = (BigDecimal)
-                coerceToPrimitiveNumber(pLeft, BigDecimal.class, pLogger);
+                coerceToPrimitiveNumber(pLeft, BigDecimal.class);
             BigDecimal right = (BigDecimal)
-                coerceToPrimitiveNumber(pRight, BigDecimal.class, pLogger);
+                coerceToPrimitiveNumber(pRight, BigDecimal.class);
             return pOperator.apply(left, right);
         } else {
             double left =
-                coerceToPrimitiveNumber(pLeft, Double.class, pLogger).
+                coerceToPrimitiveNumber(pLeft, Double.class).
                 doubleValue();
             double right =
-                coerceToPrimitiveNumber(pRight, Double.class, pLogger).
+                coerceToPrimitiveNumber(pRight, Double.class).
                 doubleValue();
             return
                 PrimitiveObjects.getDouble(pOperator.apply(left, right));
@@ -862,18 +867,18 @@ public class Coercions
 
     else if (isBigInteger(pLeft) || isBigInteger(pRight)) {
         BigInteger left = (BigInteger)
-            coerceToPrimitiveNumber(pLeft, BigInteger.class, pLogger);
+            coerceToPrimitiveNumber(pLeft, BigInteger.class);
         BigInteger right = (BigInteger)
-            coerceToPrimitiveNumber(pRight, BigInteger.class, pLogger);
+            coerceToPrimitiveNumber(pRight, BigInteger.class);
         return pOperator.apply(left, right);
     }
 
     else {
       long left =
-	coerceToPrimitiveNumber (pLeft, Long.class, pLogger).
+	coerceToPrimitiveNumber (pLeft, Long.class).
 	longValue ();
       long right =
-	coerceToPrimitiveNumber (pRight, Long.class, pLogger).
+	coerceToPrimitiveNumber (pRight, Long.class).
 	longValue ();
       return
 	PrimitiveObjects.getLong (pOperator.apply (left, right));
@@ -889,25 +894,24 @@ public class Coercions
   public static Object applyRelationalOperator 
     (Object pLeft,
      Object pRight,
-     RelationalOperator pOperator,
-     Logger pLogger)
+     RelationalOperator pOperator)
     throws ELException
   {
     if (isBigDecimal(pLeft) || isBigDecimal(pRight)) {
         BigDecimal left = (BigDecimal)
-            coerceToPrimitiveNumber(pLeft, BigDecimal.class, pLogger);
+            coerceToPrimitiveNumber(pLeft, BigDecimal.class);
         BigDecimal right = (BigDecimal)
-            coerceToPrimitiveNumber(pRight, BigDecimal.class, pLogger);
+            coerceToPrimitiveNumber(pRight, BigDecimal.class);
         return PrimitiveObjects.getBoolean(pOperator.apply(left, right));
     }
 
     else if (isFloatingPointType (pLeft) ||
 	isFloatingPointType (pRight)) {
       double left =
-	coerceToPrimitiveNumber (pLeft, Double.class, pLogger).
+	coerceToPrimitiveNumber (pLeft, Double.class).
 	doubleValue ();
       double right =
-	coerceToPrimitiveNumber (pRight, Double.class, pLogger).
+	coerceToPrimitiveNumber (pRight, Double.class).
 	doubleValue ();
       return 
 	PrimitiveObjects.getBoolean (pOperator.apply (left, right));
@@ -915,19 +919,19 @@ public class Coercions
 
     else if (isBigInteger(pLeft) || isBigInteger(pRight)) {
         BigInteger left = (BigInteger)
-            coerceToPrimitiveNumber(pLeft, BigInteger.class, pLogger);
+            coerceToPrimitiveNumber(pLeft, BigInteger.class);
         BigInteger right = (BigInteger)
-            coerceToPrimitiveNumber(pRight, BigInteger.class, pLogger);
+            coerceToPrimitiveNumber(pRight, BigInteger.class);
         return PrimitiveObjects.getBoolean(pOperator.apply(left, right));
     }
 
     else if (isIntegerType (pLeft) ||
 	     isIntegerType (pRight)) {
       long left =
-	coerceToPrimitiveNumber (pLeft, Long.class, pLogger).
+	coerceToPrimitiveNumber (pLeft, Long.class).
 	longValue ();
       long right =
-	coerceToPrimitiveNumber (pRight, Long.class, pLogger).
+	coerceToPrimitiveNumber (pRight, Long.class).
 	longValue ();
       return
 	PrimitiveObjects.getBoolean (pOperator.apply (left, right));
@@ -935,8 +939,8 @@ public class Coercions
 
     else if (pLeft instanceof String ||
 	     pRight instanceof String) {
-      String left = coerceToString (pLeft, pLogger);
-      String right = coerceToString (pRight, pLogger);
+      String left = coerceToString (pLeft);
+      String right = coerceToString (pRight);
       return
 	PrimitiveObjects.getBoolean (pOperator.apply (left, right));
     }
@@ -949,14 +953,14 @@ public class Coercions
 	  (pOperator.apply (result, -result));
       }
       catch (Exception exc) {
-	if (pLogger.isLoggingError ()) {
-	  pLogger.logError
-	    (Constants.COMPARABLE_ERROR,
-	     exc,
-	     pLeft.getClass ().getName (),
-	     (pRight == null) ? "null" : pRight.getClass ().getName (),
-	     pOperator.getOperatorSymbol ());
-	}
+          if (log.isErrorEnabled()) {
+              log.error(
+                  MessageUtil.getMessageWithArgs(
+                      Constants.COMPARABLE_ERROR,
+                      pLeft.getClass().getName(),
+                      (pRight == null) ? "null" : pRight.getClass().getName(),
+                      pOperator.getOperatorSymbol()), exc);
+          }	
 	return Boolean.FALSE;
       }
     }
@@ -969,26 +973,27 @@ public class Coercions
 	  (pOperator.apply (-result, result));
       }
       catch (Exception exc) {
-	if (pLogger.isLoggingError ()) {
-	  pLogger.logError
-	    (Constants.COMPARABLE_ERROR,
-	     exc,
-	     pRight.getClass ().getName (),
-	     (pLeft == null) ? "null" : pLeft.getClass ().getName (),
-	     pOperator.getOperatorSymbol ());
-	}
+          if (log.isErrorEnabled()) {
+              log.error(
+                  MessageUtil.getMessageWithArgs(
+                      Constants.COMPARABLE_ERROR,
+                      pRight.getClass().getName(),
+                      (pLeft == null) ? "null" : pLeft.getClass().getName(),
+                      pOperator.getOperatorSymbol()), exc);
+          }		
 	return Boolean.FALSE;
       }
     }
 
     else {
-      if (pLogger.isLoggingError ()) {
-	pLogger.logError
-	  (Constants.ARITH_OP_BAD_TYPE,
-	   pOperator.getOperatorSymbol (),
-	   pLeft.getClass ().getName (),
-	   pRight.getClass ().getName ());
-      }
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.ARITH_OP_BAD_TYPE,
+                    pOperator.getOperatorSymbol(),
+                    pLeft.getClass().getName(),
+                    pRight.getClass().getName()));
+        }     
       return Boolean.FALSE;
     }
   }
@@ -1002,94 +1007,93 @@ public class Coercions
   public static Object applyEqualityOperator 
     (Object pLeft,
      Object pRight,
-     EqualityOperator pOperator,
-     Logger pLogger)
+     EqualityOperator pOperator)
     throws ELException
   {
     if (pLeft == pRight) {
-      return PrimitiveObjects.getBoolean (pOperator.apply (true, pLogger));
+      return PrimitiveObjects.getBoolean (pOperator.apply (true));
     }
 
     else if (pLeft == null ||
 	     pRight == null) {
-      return PrimitiveObjects.getBoolean (pOperator.apply (false, pLogger));
+      return PrimitiveObjects.getBoolean (pOperator.apply (false));
     }
 
     else if (isBigDecimal(pLeft) || isBigDecimal(pRight)) {
         BigDecimal left = (BigDecimal)
-            coerceToPrimitiveNumber(pLeft, BigDecimal.class, pLogger);
+            coerceToPrimitiveNumber(pLeft, BigDecimal.class);
         BigDecimal right = (BigDecimal)
-            coerceToPrimitiveNumber(pRight, BigDecimal.class, pLogger);
-        return PrimitiveObjects.getBoolean(pOperator.apply(left.equals(right), pLogger));
+            coerceToPrimitiveNumber(pRight, BigDecimal.class);
+        return PrimitiveObjects.getBoolean(pOperator.apply(left.equals(right)));
     }
 
     else if (isFloatingPointType (pLeft) ||
 	     isFloatingPointType (pRight)) {
       double left =
-	coerceToPrimitiveNumber (pLeft, Double.class, pLogger).
+	coerceToPrimitiveNumber (pLeft, Double.class).
 	doubleValue ();
       double right =
-	coerceToPrimitiveNumber (pRight, Double.class, pLogger).
+	coerceToPrimitiveNumber (pRight, Double.class).
 	doubleValue ();
       return 
 	PrimitiveObjects.getBoolean 
-	(pOperator.apply (left == right, pLogger));
+	(pOperator.apply (left == right));
     }
 
     else if (isBigInteger(pLeft) || isBigInteger(pRight)) {
         BigInteger left = (BigInteger)
-            coerceToPrimitiveNumber(pLeft, BigInteger.class, pLogger);
+            coerceToPrimitiveNumber(pLeft, BigInteger.class);
         BigInteger right = (BigInteger)
-            coerceToPrimitiveNumber(pRight, BigInteger.class, pLogger);
-        return PrimitiveObjects.getBoolean(pOperator.apply(left.equals(right), pLogger));
+            coerceToPrimitiveNumber(pRight, BigInteger.class);
+        return PrimitiveObjects.getBoolean(pOperator.apply(left.equals(right)));
     }
 
     else if (isIntegerType (pLeft) ||
 	     isIntegerType (pRight)) {
       long left =
-	coerceToPrimitiveNumber (pLeft, Long.class, pLogger).
+	coerceToPrimitiveNumber (pLeft, Long.class).
 	longValue ();
       long right =
-	coerceToPrimitiveNumber (pRight, Long.class, pLogger).
+	coerceToPrimitiveNumber (pRight, Long.class).
 	longValue ();
       return
 	PrimitiveObjects.getBoolean 
-	(pOperator.apply (left == right, pLogger));
+	(pOperator.apply (left == right));
     }
 
     else if (pLeft instanceof Boolean ||
 	     pRight instanceof Boolean) {
-      boolean left = coerceToBoolean (pLeft, pLogger).booleanValue ();
-      boolean right = coerceToBoolean (pRight, pLogger).booleanValue ();
+      boolean left = coerceToBoolean (pLeft).booleanValue ();
+      boolean right = coerceToBoolean (pRight).booleanValue ();
       return
 	PrimitiveObjects.getBoolean 
-	(pOperator.apply (left == right, pLogger));
+	(pOperator.apply (left == right));
     }
 
     else if (pLeft instanceof String ||
 	     pRight instanceof String) {
-      String left = coerceToString (pLeft, pLogger);
-      String right = coerceToString (pRight, pLogger);
+      String left = coerceToString (pLeft);
+      String right = coerceToString (pRight);
       return
 	PrimitiveObjects.getBoolean 
-	(pOperator.apply (left.equals (right), pLogger));
+	(pOperator.apply (left.equals (right)));
     }
 
     else {
       try {
       return
 	PrimitiveObjects.getBoolean
-	(pOperator.apply (pLeft.equals (pRight), pLogger));
+	(pOperator.apply (pLeft.equals (pRight)));
       }
       catch (Exception exc) {
-	if (pLogger.isLoggingError ()) {
-	  pLogger.logError
-	    (Constants.ERROR_IN_EQUALS,
-	     exc,
-	     pLeft.getClass ().getName (),
-	     pRight.getClass ().getName (),
-	     pOperator.getOperatorSymbol ());
-	}
+          if (log.isErrorEnabled()) {
+              log.error(
+                  MessageUtil.getMessageWithArgs(
+                      Constants.ERROR_IN_EQUALS,
+                      pLeft.getClass().getName(),
+                      pRight.getClass().getName(),
+                      pOperator.getOperatorSymbol()), exc);
+          }	
 	return Boolean.FALSE;
       }
     }

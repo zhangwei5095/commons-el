@@ -55,6 +55,9 @@
 
 package org.apache.commons.el;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import javax.servlet.jsp.el.ELException;
 import java.math.BigInteger;
 import java.math.BigDecimal;
@@ -70,6 +73,12 @@ import java.math.BigDecimal;
 public class UnaryMinusOperator
   extends UnaryOperator
 {
+    
+    //-------------------------------------
+    // Constants
+    //-------------------------------------
+    private static Log log = LogFactory.getLog(UnaryMinusOperator.class);
+    
   //-------------------------------------
   // Singleton
   //-------------------------------------
@@ -103,18 +112,11 @@ public class UnaryMinusOperator
    *
    * Applies the operator to the given value
    **/
-  public Object apply (Object pValue,
-		       Logger pLogger)
+  public Object apply (Object pValue)
     throws ELException
   {
     if (pValue == null) {
-      /*
-      if (pLogger.isLoggingWarning ()) {
-	pLogger.logWarning
-	  (Constants.ARITH_OP_NULL,
-	   getOperatorSymbol ());
-      }
-      */
+    
       return PrimitiveObjects.getInteger (0);
     }
 
@@ -131,7 +133,7 @@ public class UnaryMinusOperator
 	double dval =
 	  ((Number) 
 	   (Coercions.coerceToPrimitiveNumber 
-	    (pValue, Double.class, pLogger))).
+	    (pValue, Double.class))).
 	  doubleValue ();
 	return PrimitiveObjects.getDouble (-dval);
       }
@@ -139,7 +141,7 @@ public class UnaryMinusOperator
 	long lval =
 	  ((Number) 
 	   (Coercions.coerceToPrimitiveNumber 
-	    (pValue, Long.class, pLogger))).
+	    (pValue, Long.class))).
 	  longValue ();
 	return PrimitiveObjects.getLong (-lval);
       }
@@ -171,12 +173,13 @@ public class UnaryMinusOperator
     }
 
     else {
-      if (pLogger.isLoggingError ()) {
-	pLogger.logError
-	  (Constants.UNARY_OP_BAD_TYPE,
-	   getOperatorSymbol (),
-	   pValue.getClass ().getName ());
-      }
+        if (log.isErrorEnabled()) {
+            log.error(
+                MessageUtil.getMessageWithArgs(
+                    Constants.UNARY_OP_BAD_TYPE,
+                    getOperatorSymbol(),
+                    pValue.getClass().getName()));
+        }     
       return PrimitiveObjects.getInteger (0);
     }
   }

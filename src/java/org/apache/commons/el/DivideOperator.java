@@ -55,6 +55,9 @@
 
 package org.apache.commons.el;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import javax.servlet.jsp.el.ELException;
 import java.math.BigDecimal;
 
@@ -69,6 +72,11 @@ import java.math.BigDecimal;
 public class DivideOperator
   extends BinaryOperator
 {
+    //-------------------------------------
+    // Constants
+    //-------------------------------------
+    private static Log log = LogFactory.getLog(DivideOperator.class);
+    
   //-------------------------------------
   // Singleton
   //-------------------------------------
@@ -103,17 +111,17 @@ public class DivideOperator
    * Applies the operator to the given value
    **/
   public Object apply (Object pLeft,
-		       Object pRight,
-		       Logger pLogger)
+		       Object pRight)
     throws ELException
   {
     if (pLeft == null &&
 	pRight == null) {
-      if (pLogger.isLoggingWarning ()) {
-	pLogger.logWarning
-	  (Constants.ARITH_OP_NULL,
-	   getOperatorSymbol ());
-      }
+        if (log.isWarnEnabled()) {
+            log.warn(
+                MessageUtil.getMessageWithArgs(
+                    Constants.ARITH_OP_NULL,
+                    getOperatorSymbol()));
+        }     
       return PrimitiveObjects.getInteger (0);
     }
 
@@ -123,41 +131,43 @@ public class DivideOperator
         Coercions.isBigInteger(pRight)) {
 
         BigDecimal left = (BigDecimal)
-            Coercions.coerceToPrimitiveNumber(pLeft, BigDecimal.class, pLogger);
+            Coercions.coerceToPrimitiveNumber(pLeft, BigDecimal.class);
         BigDecimal right = (BigDecimal)
-            Coercions.coerceToPrimitiveNumber(pRight, BigDecimal.class, pLogger);
+            Coercions.coerceToPrimitiveNumber(pRight, BigDecimal.class);
 
         try {
             return left.divide(right, BigDecimal.ROUND_HALF_UP);
         } catch (Exception exc) {
-            if (pLogger.isLoggingError()) {
-                pLogger.logError
-                    (Constants.ARITH_ERROR,
+            if (log.isErrorEnabled()) {
+                log.error(
+                    MessageUtil.getMessageWithArgs(
+                        Constants.ARITH_ERROR,
                         getOperatorSymbol(),
                         "" + left,
-                        "" + right);
-            }
+                        "" + right));
+            }            
             return PrimitiveObjects.getInteger(0);
         }
     } else {
 
         double left =
-            Coercions.coerceToPrimitiveNumber(pLeft, Double.class, pLogger).
+            Coercions.coerceToPrimitiveNumber(pLeft, Double.class).
             doubleValue();
         double right =
-            Coercions.coerceToPrimitiveNumber(pRight, Double.class, pLogger).
+            Coercions.coerceToPrimitiveNumber(pRight, Double.class).
             doubleValue();
 
         try {
             return PrimitiveObjects.getDouble(left / right);
         } catch (Exception exc) {
-            if (pLogger.isLoggingError()) {
-                pLogger.logError
-                    (Constants.ARITH_ERROR,
+            if (log.isErrorEnabled()) {
+                log.error(
+                    MessageUtil.getMessageWithArgs(
+                        Constants.ARITH_ERROR,
                         getOperatorSymbol(),
                         "" + left,
-                        "" + right);
-            }
+                        "" + right));
+            }         
             return PrimitiveObjects.getInteger(0);
         }
     }
