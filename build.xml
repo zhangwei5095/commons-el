@@ -3,7 +3,7 @@
 
 <!--
         "Expression Language" component of the Jakarta Commons Subproject
-        $Id: build.xml,v 1.1 2003/02/04 00:22:24 luehe Exp $
+        $Id: build.xml,v 1.3 2003/02/26 16:59:09 luehe Exp $
 -->
 
 
@@ -151,7 +151,19 @@
   </target>
 
 
-  <target name="compile" depends="static"
+  <target name="build-servletapi" unless="servletapi.build.notrequired" >
+    <echo>========== Building: ${servlet-api.jar}</echo>
+    <ant dir="${api.home}/jsr154" target="jar"/>
+  </target>
+
+
+  <target name="build-jspapi" unless="jspapi.build.notrequired" >
+    <echo>========== Building: ${jsp-api.jar}</echo>
+    <ant dir="${api.home}/jsr152" target="jar"/>
+  </target>
+
+
+  <target name="compile" depends="static,build-servletapi,build-jspapi"
    description="Compile shareable components">
     <javac  srcdir="${source.home}"
            destdir="${build.home}/classes"
