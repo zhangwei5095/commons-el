@@ -134,7 +134,7 @@ PARSER_END(ELParser)
 | < OR1: "or" >
 | < OR2: "||" >
 | < EMPTY: "empty" >
-
+| < COND: "?" >
 
 /* Identifiers */
 
@@ -252,7 +252,10 @@ Expression Expression () :
   Expression ret;
 }
 {
-  ret = OrExpression ()
+  (
+   LOOKAHEAD(ConditionalExpression()) ret = ConditionalExpression() |
+   ret = OrExpression ()
+  )
   { return ret; }
 }
 
@@ -503,6 +506,22 @@ Expression MultiplyExpression () :
   }
 }
 
+Expression ConditionalExpression () :
+{
+ Expression condition, trueBranch, falseBranch;
+}
+{
+ (
+  condition = OrExpression ()
+  <COND>
+  trueBranch = Expression ()
+  <COLON>
+  falseBranch = Expression ()
+ )
+ {
+  return new ConditionalExpression(condition, trueBranch, falseBranch);
+ }
+}
 
 Expression UnaryExpression () :
 {
@@ -513,25 +532,25 @@ Expression UnaryExpression () :
 }
 {
   (
-   (
+    (
     (<NOT1> | <NOT2>) { operator = NotOperator.SINGLETON; }
     | <MINUS> { operator = UnaryMinusOperator.SINGLETON; }
     | <EMPTY> { operator = EmptyOperator.SINGLETON; }
     )
-  {
-    if (singleOperator == null) {
+    {
+     if (singleOperator == null) {
       singleOperator = operator;
-    }
-    else if (operators == null) {
+     }
+     else if (operators == null) {
       operators = new ArrayList ();
       operators.add (singleOperator);
       operators.add (operator);
-    }
-    else {
+     }
+     else {
       operators.add (operator);
+     }
     }
-  }
-   )*
+  )*
 
     expression = Value ()
 
