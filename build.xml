@@ -18,7 +18,7 @@
 
 <!--
         "Expression Language" component of the Jakarta Commons Subproject
-        $Id: build.xml,v 1.9 2004/02/25 22:40:49 scolebourne Exp $
+        $Id: build.xml,v 1.10 2004/02/27 23:17:53 scolebourne Exp $
 -->
 
 
@@ -246,7 +246,9 @@
   <target name="dist" depends="compile,javadoc"
    description="Create binary distribution">
     <mkdir      dir="${dist.home}"/>
-    <copy      file="../LICENSE"
+    <copy      file="LICENSE.txt"
+              todir="${dist.home}"/>
+    <copy      file="NOTICE.txt"
               todir="${dist.home}"/>
     <copy      file="RELEASE-NOTES.txt"
               todir="${dist.home}"/>
@@ -258,8 +260,10 @@
    description="Create jar">
     <mkdir      dir="${dist.home}"/>
     <mkdir      dir="${build.home}/classes/META-INF"/>
-    <copy      file="../LICENSE"
+    <copy      file="LICENSE.txt"
              tofile="${build.home}/classes/META-INF/LICENSE.txt"/>
+    <copy      file="NOTICE.txt"
+             tofile="${build.home}/classes/META-INF/NOTICE.txt"/>
     <jar    jarfile="${commons-el.jar}"
            manifest="${build.home}/conf/MANIFEST.MF">
      <fileset dir="${build.home}/classes" includes="org/apache/commons/el/**" />
@@ -273,12 +277,15 @@
     <copy  todir="${build.home}/classes/META-INF" filtering="on">
       <fileset dir="${conf.home}" includes="*.MF"/>
     </copy>
-    <copy      file="../LICENSE"
+    <copy      file="LICENSE.txt"
              tofile="${build.home}/classes/META-INF/LICENSE.txt"/>
+    <copy      file="NOTICE.txt"
+             tofile="${build.home}/classes/META-INF/NOTICE.txt"/>
     <jar    jarfile="${commons-el.jar}"
            manifest="${build.home}/classes/META-INF/MANIFEST.MF">
      <fileset dir="${build.home}/classes" includes="org/apache/commons/el/**" />
      <fileset dir="${build.home}/classes" includes="META-INF/LICENSE.txt" />
+     <fileset dir="${build.home}/classes" includes="META-INF/NOTICE.txt" />
     </jar>  
 
   </target>
