@@ -3,7 +3,7 @@
 
 <!--
         "Expression Language" component of the Jakarta Commons Subproject
-        $Id: build.xml,v 1.5 2003/03/13 22:00:32 costin Exp $
+        $Id: build.xml,v 1.6 2003/06/06 22:35:28 luehe Exp $
 -->
 
 
@@ -232,10 +232,8 @@
     <mkdir      dir="${dist.home}"/>
     <copy      file="../LICENSE"
               todir="${dist.home}"/>
-<!-- Comment out for separate commons-el build
     <copy      file="RELEASE-NOTES.txt"
               todir="${dist.home}"/>
--->
     <antcall target="jar"/>
   </target>
 
