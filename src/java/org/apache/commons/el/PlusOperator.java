@@ -119,7 +119,8 @@ public class PlusOperator
 
     /**
      *
-     * Applies the operator to the given BigDecimal values, returning a BigDecimal
+     * Applies the operator to the given BigDecimal values, returning a
+     * BigDecimal.
      **/
     public BigDecimal apply(BigDecimal pLeft, BigDecimal pRight) {
         return pLeft.add(pRight);
@@ -129,7 +130,8 @@ public class PlusOperator
 
     /**
      *
-     * Applies the operator to the given BigDecimal values, returning a BigDecimal
+     * Applies the operator to the given BigInteger values, returning a
+     * BigInteger.
      **/
     public BigInteger apply(BigInteger pLeft, BigInteger pRight) {
         return pLeft.add(pRight);

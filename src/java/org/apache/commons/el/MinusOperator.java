@@ -118,7 +118,7 @@ public class MinusOperator
 
     /**
      *
-     * Applies the operator to the given BigDecimal values, returning a BigDecimal
+     * Applies the operator to the given BigDecimal values, returning a BigDecimal.
      **/
     public BigDecimal apply(BigDecimal pLeft, BigDecimal pRight) {
         return pLeft.subtract(pRight);
@@ -128,7 +128,7 @@ public class MinusOperator
 
     /**
      *
-     * Applies the operator to the given BigInteger values, returning a BigInteger
+     * Applies the operator to the given BigInteger values, returning a BigInteger.
      **/
     public BigInteger apply(BigInteger pLeft, BigInteger pRight) {
         return pLeft.subtract(pRight);

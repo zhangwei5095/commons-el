@@ -125,7 +125,7 @@ public class MultiplyOperator
 
     /**
      *
-     * Applies the operator to the given BigDecimal values, returning a BigDecimal
+     * Applies the operator to the given BigDecimal values, returning a BigDecimal.
      **/
     public BigDecimal apply(BigDecimal pLeft,
                             BigDecimal pRight
@@ -137,7 +137,7 @@ public class MultiplyOperator
 
     /**
      *
-     * Applies the operator to the given BigInteger values, returning a BigInteger
+     * Applies the operator to the given BigInteger values, returning a BigInteger.
      **/
     public BigInteger apply(BigInteger pLeft,
                             BigInteger pRight
