@@ -18,8 +18,9 @@
   <pomVersion>3</pomVersion>
   
   <name>EL</name>
-  <id>commons-el</id>
-  <currentVersion>1.0</currentVersion>
+  <groupId>commons-el</groupId>
+  <artifactId>commons-el</artifactId>
+  <currentVersion>1.0.1-SNAPSHOT</currentVersion>
   <inceptionYear>2003</inceptionYear>
   <shortDescription>Commons EL</shortDescription>
   <description>JSP 2.0 Expression Language Interpreter Implementation</description>
