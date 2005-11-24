@@ -104,15 +104,18 @@
   
   <dependencies>
     <dependency>
-      <id>servletapi</id>
+      <groupId>servletapi</groupId>
+      <artifactId>servletapi</artifactId>
       <version>SNAPSHOT</version>
     </dependency>
     <dependency>
-      <id>jspapi</id>
+      <groupId>jspapi</groupId>
+      <artifactId>jspapi</artifactId>
       <version>2.0</version>
     </dependency>
     <dependency>
-      <id>commons-logging</id>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
       <version>1.0.3</version>
     </dependency>
   </dependencies>
