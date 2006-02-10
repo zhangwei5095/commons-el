@@ -15,9 +15,6 @@
  */
 package org.apache.commons.el;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.beans.BeanInfo;
 import java.beans.EventSetDescriptor;
 import java.beans.IndexedPropertyDescriptor;
@@ -26,10 +23,13 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.jsp.el.ELException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *

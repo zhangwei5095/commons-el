@@ -16,8 +16,8 @@
 package org.apache.commons.el;
 
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.el.ELException;
+import javax.servlet.jsp.el.VariableResolver;
 
 /**
  *

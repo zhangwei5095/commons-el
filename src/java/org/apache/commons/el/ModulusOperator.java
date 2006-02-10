@@ -15,11 +15,12 @@
  */
 package org.apache.commons.el;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.math.BigInteger;
 
 import javax.servlet.jsp.el.ELException;
-import java.math.BigInteger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *

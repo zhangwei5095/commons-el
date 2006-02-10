@@ -16,9 +16,10 @@
 package org.apache.commons.el;
 
 import java.util.List;
+
 import javax.servlet.jsp.el.ELException;
-import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.el.FunctionMapper;
+import javax.servlet.jsp.el.VariableResolver;
 
 /**
  *

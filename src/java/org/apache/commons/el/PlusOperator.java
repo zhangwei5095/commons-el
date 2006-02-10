@@ -15,7 +15,6 @@
  */
 package org.apache.commons.el;
 
-import javax.servlet.jsp.el.ELException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 

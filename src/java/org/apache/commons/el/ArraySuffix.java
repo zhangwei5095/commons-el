@@ -15,16 +15,17 @@
  */
 package org.apache.commons.el;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.jsp.el.VariableResolver;
+
 import javax.servlet.jsp.el.ELException;
 import javax.servlet.jsp.el.FunctionMapper;
+import javax.servlet.jsp.el.VariableResolver;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *

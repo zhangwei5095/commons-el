@@ -16,7 +16,6 @@
 package org.apache.commons.el;
 
 import java.beans.IndexedPropertyDescriptor;
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
 /**

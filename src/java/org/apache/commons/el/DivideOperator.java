@@ -15,11 +15,12 @@
  */
 package org.apache.commons.el;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.math.BigDecimal;
 
 import javax.servlet.jsp.el.ELException;
-import java.math.BigDecimal;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *

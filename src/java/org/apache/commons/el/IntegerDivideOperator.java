@@ -15,10 +15,10 @@
  */
 package org.apache.commons.el;
 
+import javax.servlet.jsp.el.ELException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import javax.servlet.jsp.el.ELException;
 
 /**
  *
