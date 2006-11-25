@@ -18,7 +18,7 @@
   <pomVersion>3</pomVersion>
   
   <name>EL</name>
-  <groupId>org.apache.commons</groupId>
+  <groupId>commons-el</groupId>
   <artifactId>commons-el</artifactId>
   <currentVersion>1.0.1-SNAPSHOT</currentVersion>
   <inceptionYear>2003</inceptionYear>
