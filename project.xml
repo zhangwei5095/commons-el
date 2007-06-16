@@ -60,13 +60,13 @@
       <name>Commons Dev List</name>
       <subscribe>commons-dev-subscribe@jakarta.apache.org</subscribe>
       <unsubscribe>commons-dev-unsubscribe@jakarta.apache.org</unsubscribe>
-      <archive>http://mail-archives.apache.org/eyebrowse/SummarizeList?listName=commons-dev@jakarta.apache.org</archive>
+      <archive>http://mail-archives.apache.org/mod_mbox/jakarta-commons-dev/</archive>
     </mailingList>
     <mailingList>
       <name>Commons User List</name>
       <subscribe>commons-user-subscribe@jakarta.apache.org</subscribe>
       <unsubscribe>commons-user-unsubscribe@jakarta.apache.org</unsubscribe>
-      <archive>http://mail-archives.apache.org/eyebrowse/SummarizeList?listName=commons-user@jakarta.apache.org</archive>
+      <archive>http://mail-archives.apache.org/mod_mbox/jakarta-commons-user/</archive>
     </mailingList>
   </mailingLists>
   
@@ -108,11 +108,17 @@
       <groupId>servletapi</groupId>
       <artifactId>servletapi</artifactId>
       <version>2.4</version>
+      <properties>
+          <scope>provided</scope>
+      </properties>
     </dependency>
     <dependency>
       <groupId>jspapi</groupId>
       <artifactId>jsp-api</artifactId>
       <version>2.0</version>
+      <properties>
+          <scope>provided</scope>
+      </properties>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
@@ -145,6 +151,15 @@
         <include>**/*Test.java</include>
       </includes>
     </unitTest>
+    <resources>
+      <resource>
+        <directory>${basedir}</directory>
+        <targetPath>META-INF</targetPath>
+        <includes>
+          <include>NOTICE.txt</include>
+        </includes>
+      </resource>
+    </resources>
   </build>
   
   <reports>

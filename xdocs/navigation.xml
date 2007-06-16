@@ -15,7 +15,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<!DOCTYPE org.apache.commons.menus SYSTEM '../../commons-build/menus/menus.dtd'>
+<!DOCTYPE org.apache.commons.menus SYSTEM 'http://jakarta.apache.org/commons/build/maven-build.dtd'>
 <project name="EL">
 
   <title>EL</title>
@@ -25,20 +25,22 @@
 
   <body>
     <links>
-      <item name="Jakarta Commons"                   
-            href="http://jakarta.apache.org/commons/"/>
+      <item name="Apache"  href="http://www.apache.org"/>
+      <item name="Jakarta" href="http://jakarta.apache.org"/>
+      <item name="Commons" href="http://jakarta.apache.org/commons/"/>
     </links>
 
     <menu name="Commons EL">
       <item name="Overview" href="/index.html"/>
       <item name="Javadoc (Release)" href="api/index.html"/>
       <item name="Mailing lists" href="/mail-lists.html"/>
+      <item name="Issue Tracking"          href="/issue-tracking.html"/>
       <item name="Team" href="/team-list.html"/>
       <item name="Proposal" href="/proposal.html"/>
-      <item name="CVS" href="http://cvs.apache.org/viewcvs/jakarta-commons/el/"/>
-      <item name="Javadoc (CVS latest)" href="apidocs/index.html"/>
+      <item name="Source Repository" href="/cvs-usage.html"/>
+      <item name="Javadoc (latest)" href="apidocs/index.html"/>
     </menu>
     
-    &common-menus;
+    &commons;
   </body>
 </project>
