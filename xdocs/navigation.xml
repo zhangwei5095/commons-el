@@ -31,14 +31,14 @@
     </links>
 
     <menu name="Commons EL">
-      <item name="Overview" href="/index.html"/>
-      <item name="Javadoc (Release)" href="api/index.html"/>
-      <item name="Mailing lists" href="/mail-lists.html"/>
-      <item name="Issue Tracking"          href="/issue-tracking.html"/>
-      <item name="Team" href="/team-list.html"/>
-      <item name="Proposal" href="/proposal.html"/>
+      <item name="Overview"          href="/index.html"/>
+      <item name="Download"          href="http://jakarta.apache.org/site/downloads/downloads_commons-el.cgi"/>
+      <item name="Javadoc (Release)" href="http://jakarta.apache.org/commons/el/api/index.html"/>
+      <item name="Mailing lists"     href="/mail-lists.html"/>
+      <item name="Issue Tracking"    href="/issue-tracking.html"/>
+      <item name="Proposal"          href="/proposal.html"/>
       <item name="Source Repository" href="/cvs-usage.html"/>
-      <item name="Javadoc (latest)" href="apidocs/index.html"/>
+      <item name="Javadoc (latest)"  href="/apidocs/index.html"/>
     </menu>
     
     &commons;
