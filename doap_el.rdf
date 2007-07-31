@@ -13,8 +13,8 @@
     <description xml:lang="en">JSP 2.0 Expression Language Interpreter Implementation</description>
     <repository>
       <SVNRepository>
-        <browse rdf:resource="http://svn.apache.org/repos/asf/jakarta/commons/proper/el/trunk"/>
-        <location rdf:resource="http://svn.apache.org/repos/asf/jakarta/commons/proper/el"/>
+        <browse rdf:resource="http://svn.apache.org/repos/asf/commons/proper/el/trunk"/>
+        <location rdf:resource="http://svn.apache.org/repos/asf/commons/proper/el"/>
       </SVNRepository>
     </repository>
     <release>
