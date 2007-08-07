@@ -44,7 +44,7 @@ public class ImplicitObjects
   //-------------------------------------
 
   static final String sAttributeName = 
-    "org.apache.taglibs.standard.ImplicitObjects";
+    "org.apache.commons.el.ImplicitObjects";
 
   //-------------------------------------
   // Member variables
