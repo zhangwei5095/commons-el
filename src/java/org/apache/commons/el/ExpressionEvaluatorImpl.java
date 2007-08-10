@@ -32,8 +32,6 @@ import org.apache.commons.el.parser.ELParser;
 import org.apache.commons.el.parser.ParseException;
 import org.apache.commons.el.parser.Token;
 import org.apache.commons.el.parser.TokenMgrError;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -87,11 +85,6 @@ import org.apache.commons.logging.LogFactory;
  **/
 
 public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
-    // -------------------------------------
-    // Constants
-    // -------------------------------------
-    private static Log log = LogFactory.getLog(ExpressionEvaluatorImpl.class);
-
     // -------------------------------------
     // Statics
     // -------------------------------------
