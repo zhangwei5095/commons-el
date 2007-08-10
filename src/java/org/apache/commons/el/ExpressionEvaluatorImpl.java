@@ -19,7 +19,6 @@ package org.apache.commons.el;
 import java.io.Reader;
 import java.io.StringReader;
 import java.text.MessageFormat;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,8 +88,7 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
     // -------------------------------------
     /** The mapping from expression String to its parsed form (String,
         Expression, or ExpressionString) */
-    static Map sCachedExpressionStrings = Collections
-            .synchronizedMap(new HashMap());
+    static Map sCachedExpressionStrings = new HashMap();
 
     /** The mapping from ExpectedType to Maps mapping literal String to
         parsed value */
@@ -309,7 +307,7 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
         synchronized (sCachedExpectedTypes) {
             Map ret = (Map) sCachedExpectedTypes.get(pExpectedType);
             if (ret == null) {
-                ret = Collections.synchronizedMap(new HashMap());
+                ret = new HashMap();
                 sCachedExpectedTypes.put(pExpectedType, ret);
             }
             return ret;
