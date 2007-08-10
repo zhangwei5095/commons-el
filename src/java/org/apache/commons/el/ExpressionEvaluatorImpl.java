@@ -240,28 +240,29 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
         }
 
         // See if it's in the cache
-        Object ret = mBypassCache ? null : sCachedExpressionStrings
-                .get(pExpressionString);
-
-        if (ret == null) {
-            // Parse the expression
-            Reader r = new StringReader(pExpressionString);
-            ELParser parser = new ELParser(r);
-            try {
-                ret = parser.ExpressionString();
-                sCachedExpressionStrings.put(pExpressionString, ret);
-            } catch (ParseException exc) {
-                throw new ELException(formatParseException(pExpressionString,
-                        exc));
-            } catch (TokenMgrError exc) {
-                // Note - this should never be reached, since the parser is
-                // constructed to tokenize any input (illegal inputs get
-                // parsed to <BADLY_ESCAPED_STRING_LITERAL> or
-                // <ILLEGAL_CHARACTER>
-                throw new ELException(exc.getMessage());
-            }
+        if (!mBypassCache
+                && sCachedExpressionStrings.containsKey(pExpressionString)) {
+            return sCachedExpressionStrings.get(pExpressionString);
         }
-        return ret;
+
+        // Parse the expression
+        Reader r = new StringReader(pExpressionString);
+        ELParser parser = new ELParser(r);
+        try {
+            Object result = parser.ExpressionString();
+            if (!mBypassCache) {
+                sCachedExpressionStrings.put(pExpressionString, result);
+            }
+            return result;
+        } catch (ParseException exc) {
+            throw new ELException(formatParseException(pExpressionString, exc));
+        } catch (TokenMgrError exc) {
+            // Note - this should never be reached, since the parser is
+            // constructed to tokenize any input (illegal inputs get
+            // parsed to <BADLY_ESCAPED_STRING_LITERAL> or
+            // <ILLEGAL_CHARACTER>
+            throw new ELException(exc.getMessage());
+        }
     }
 
     // -------------------------------------
