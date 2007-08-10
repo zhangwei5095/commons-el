@@ -82,32 +82,32 @@ import org.apache.commons.el.parser.TokenMgrError;
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
- **/
+ */
 public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
     // -------------------------------------
     // Statics
     // -------------------------------------
     /** The mapping from expression String to its parsed form (String,
-        Expression, or ExpressionString) **/
+        Expression, or ExpressionString) */
     static Map sCachedExpressionStrings = Collections
             .synchronizedMap(new HashMap());
 
     /** The mapping from ExpectedType to Maps mapping literal String to
-        parsed value **/
+        parsed value */
     static Map sCachedExpectedTypes = new HashMap();
 
     // -------------------------------------
     // Member variables
     // -------------------------------------
 
-    /** Flag if the cache should be bypassed **/
+    /** Flag if the cache should be bypassed */
     boolean mBypassCache;
 
     // -------------------------------------
     /**
      *
      * Constructor
-     **/
+     */
     public ExpressionEvaluatorImpl() {
     }
 
@@ -117,7 +117,7 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
      *
      * @param pBypassCache flag indicating if the cache should be
      * bypassed
-     **/
+     */
     public ExpressionEvaluatorImpl(boolean pBypassCache) {
         mBypassCache = pBypassCache;
     }
@@ -145,7 +145,7 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
      * @return The Expression object encapsulating the arguments.
      *
      * @exception ELException Thrown if parsing errors were found.
-     **/
+     */
     public javax.servlet.jsp.el.Expression parseExpression(String expression,
             Class expectedType, FunctionMapper fMapper) throws ELException {
         // Validate and then create an Expression object.
@@ -168,7 +168,7 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
      *     the expression.  It can be null, in which case no functions 
      *     are supported for this invocation.
      * @return the expression String evaluated to the given expected type
-     **/
+     */
     public Object evaluate(String pExpressionString, Class pExpectedType,
             VariableResolver pResolver, FunctionMapper functions)
             throws ELException {
@@ -195,7 +195,7 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
      *     the expression.  It can be null, in which case no functions 
      *     are supported for this invocation.
      * @return the expression evaluated to the given expected type
-     **/
+     */
     public Object evaluate(Object parsedExpression, Class pExpectedType,
             VariableResolver pResolver, FunctionMapper functions)
             throws ELException {
@@ -231,7 +231,7 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
      * parsed form is cached (and caching is not bypassed), return the
      * cached form, otherwise parse and cache the value.  Returns either
      * a String, Expression, or ExpressionString.
-     **/
+     */
     public Object parseExpressionString(String pExpressionString)
             throws ELException {
         // See if it's an empty String
@@ -268,7 +268,7 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
     /**
      *
      * Converts the given value to the specified expected type.
-     **/
+     */
     Object convertToExpectedType(Object pValue, Class pExpectedType)
             throws ELException {
         return Coercions.coerce(pValue, pExpectedType);
@@ -279,7 +279,7 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
      *
      * Converts the given String, specified as a static expression
      * string, to the given expected type.  The conversion is cached.
-     **/
+     */
     Object convertStaticValueToExpectedType(String pValue, Class pExpectedType)
             throws ELException {
         // See if the value is already of the expected type
@@ -303,7 +303,7 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
      *
      * Creates or returns the Map that maps string literals to parsed
      * values for the specified expected type.
-     **/
+     */
     static Map getOrCreateExpectedTypeMap(Class pExpectedType) {
         synchronized (sCachedExpectedTypes) {
             Map ret = (Map) sCachedExpectedTypes.get(pExpectedType);
@@ -322,7 +322,7 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
      *
      * Formats a ParseException into an error message suitable for
      * displaying on a web page
-     **/
+     */
     static String formatParseException(String pExpressionString,
             ParseException pExc) {
         // Generate the String of expected tokens
@@ -374,7 +374,7 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
      * Used to convert raw characters to their escaped version when
      * these raw version cannot be used as part of an ASCII string
      * literal.
-     **/
+     */
     static String addEscapes(String str) {
         StringBuffer retval = new StringBuffer();
         char ch;
@@ -418,7 +418,7 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
      *
      * Parses the given expression string, then converts it back to a
      * String in its canonical form.  This is used to test parsing.
-     **/
+     */
     public String parseAndRender(String pExpressionString) throws ELException {
         Object val = parseExpressionString(pExpressionString);
         if (val instanceof Expression) {
