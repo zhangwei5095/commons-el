@@ -93,9 +93,8 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
     private static Log log = LogFactory.getLog(ExpressionEvaluatorImpl.class);
 
     // -------------------------------------
-    // Member variables
+    // Statics
     // -------------------------------------
-
     /** The mapping from expression String to its parsed form (String,
         Expression, or ExpressionString) **/
     static Map sCachedExpressionStrings = Collections
@@ -104,6 +103,10 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
     /** The mapping from ExpectedType to Maps mapping literal String to
         parsed value **/
     static Map sCachedExpectedTypes = new HashMap();
+
+    // -------------------------------------
+    // Member variables
+    // -------------------------------------
 
     /** Flag if the cache should be bypassed **/
     boolean mBypassCache;
