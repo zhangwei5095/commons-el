@@ -157,7 +157,7 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
         parseExpressionString(expression);
 
         // Create an Expression object that knows how to evaluate this.
-        return new JSTLExpression(this, expression, expectedType, fMapper);
+        return new JSTLExpression(expression, expectedType, fMapper);
     }
 
     // -------------------------------------
@@ -427,22 +427,20 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
      * the JSTL evaluator.
      */
     private class JSTLExpression extends javax.servlet.jsp.el.Expression {
-        private ExpressionEvaluatorImpl evaluator;
         private String expression;
         private Class expectedType;
         private FunctionMapper fMapper;
 
-        public JSTLExpression(ExpressionEvaluatorImpl evaluator,
-                String expression, Class expectedType, FunctionMapper fMapper) {
-            this.evaluator = evaluator;
+        private JSTLExpression(String expression,
+                Class expectedType, FunctionMapper fMapper) {
             this.expression = expression;
             this.expectedType = expectedType;
             this.fMapper = fMapper;
         }
 
         public Object evaluate(VariableResolver vResolver) throws ELException {
-            return evaluator.evaluate(this.expression, this.expectedType,
-                    vResolver, this.fMapper);
+            return ExpressionEvaluatorImpl.this.evaluate(expression,
+                    expectedType, vResolver, fMapper);
         }
     }
 
