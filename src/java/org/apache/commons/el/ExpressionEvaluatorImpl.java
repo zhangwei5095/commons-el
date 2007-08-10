@@ -83,7 +83,6 @@ import org.apache.commons.el.parser.TokenMgrError;
  * @author Shawn Bayern
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
  **/
-
 public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
     // -------------------------------------
     // Statics
@@ -150,10 +149,10 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
     public javax.servlet.jsp.el.Expression parseExpression(String expression,
             Class expectedType, FunctionMapper fMapper) throws ELException {
         // Validate and then create an Expression object.
-        parseExpressionString(expression);
+        Object parsedExpression = parseExpressionString(expression);
 
         // Create an Expression object that knows how to evaluate this.
-        return new JSTLExpression(expression, expectedType, fMapper);
+        return new JSTLExpression(parsedExpression, expectedType, fMapper);
     }
 
     // -------------------------------------
@@ -168,8 +167,7 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
      * @param functions A FunctionMapper to resolve functions found in 
      *     the expression.  It can be null, in which case no functions 
      *     are supported for this invocation.
-     * @return the expression String evaluated to the given expected
-     * type
+     * @return the expression String evaluated to the given expected type
      **/
     public Object evaluate(String pExpressionString, Class pExpectedType,
             VariableResolver pResolver, FunctionMapper functions)
@@ -181,24 +179,43 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
 
         // Get the parsed version of the expression string
         Object parsedValue = parseExpressionString(pExpressionString);
+        return evaluate(parsedValue, pExpectedType, pResolver, functions);
+    }
 
+    // -------------------------------------
+    /**
+     *
+     * Evaluates the given parsed expression.
+     *
+     * @param parsedExpression The expression to be evaluated.
+     * @param pExpectedType The expected type of the result of the evaluation
+     * @param pResolver A VariableResolver instance that can be used at 
+     *     runtime to resolve the name of implicit objects into Objects.
+     * @param functions A FunctionMapper to resolve functions found in 
+     *     the expression.  It can be null, in which case no functions 
+     *     are supported for this invocation.
+     * @return the expression evaluated to the given expected type
+     **/
+    public Object evaluate(Object parsedExpression, Class pExpectedType,
+            VariableResolver pResolver, FunctionMapper functions)
+            throws ELException {
         // Evaluate differently based on the parsed type
-        if (parsedValue instanceof String) {
+        if (parsedExpression instanceof String) {
             // Convert the String, and cache the conversion
-            String strValue = (String) parsedValue;
+            String strValue = (String) parsedExpression;
             return convertStaticValueToExpectedType(strValue, pExpectedType);
         }
 
-        if (parsedValue instanceof Expression) {
+        if (parsedExpression instanceof Expression) {
             // Evaluate the expression and convert
-            Object value = ((Expression) parsedValue).evaluate(pResolver,
+            Object value = ((Expression) parsedExpression).evaluate(pResolver,
                     functions);
             return convertToExpectedType(value, pExpectedType);
         }
 
-        if (parsedValue instanceof ExpressionString) {
+        if (parsedExpression instanceof ExpressionString) {
             // Evaluate the expression/string list and convert
-            String strValue = ((ExpressionString) parsedValue).evaluate(
+            String strValue = ((ExpressionString) parsedExpression).evaluate(
                     pResolver, functions);
             return convertToExpectedType(strValue, pExpectedType);
         }
@@ -418,19 +435,19 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
      * the JSTL evaluator.
      */
     private class JSTLExpression extends javax.servlet.jsp.el.Expression {
-        private String expression;
+        private Object parsedExpression;
         private Class expectedType;
         private FunctionMapper fMapper;
 
-        private JSTLExpression(String expression, Class expectedType,
+        private JSTLExpression(Object parsedExpression, Class expectedType,
                 FunctionMapper fMapper) {
-            this.expression = expression;
+            this.parsedExpression = parsedExpression;
             this.expectedType = expectedType;
             this.fMapper = fMapper;
         }
 
         public Object evaluate(VariableResolver vResolver) throws ELException {
-            return ExpressionEvaluatorImpl.this.evaluate(expression,
+            return ExpressionEvaluatorImpl.this.evaluate(parsedExpression,
                     expectedType, vResolver, fMapper);
         }
     }
