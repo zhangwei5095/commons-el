@@ -193,24 +193,22 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
             return convertStaticValueToExpectedType(strValue, pExpectedType);
         }
 
-        else if (parsedValue instanceof Expression) {
+        if (parsedValue instanceof Expression) {
             // Evaluate the expression and convert
             Object value = ((Expression) parsedValue).evaluate(pResolver,
                     functions);
             return convertToExpectedType(value, pExpectedType);
         }
 
-        else if (parsedValue instanceof ExpressionString) {
+        if (parsedValue instanceof ExpressionString) {
             // Evaluate the expression/string list and convert
             String strValue = ((ExpressionString) parsedValue).evaluate(
                     pResolver, functions);
             return convertToExpectedType(strValue, pExpectedType);
         }
 
-        else {
-            // This should never be reached
-            return null;
-        }
+        // This should never be reached
+        return null;
     }
 
     // -------------------------------------
@@ -280,12 +278,11 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
         Map valueByString = getOrCreateExpectedTypeMap(pExpectedType);
         if (!mBypassCache && valueByString.containsKey(pValue)) {
             return valueByString.get(pValue);
-        } else {
-            // Convert from a String
-            Object ret = Coercions.coerce(pValue, pExpectedType);
-            valueByString.put(pValue, ret);
-            return ret;
         }
+        // else Convert from a String
+        Object ret = Coercions.coerce(pValue, pExpectedType);
+        valueByString.put(pValue, ret);
+        return ret;
     }
 
     // -------------------------------------
@@ -411,15 +408,13 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
      **/
     public String parseAndRender(String pExpressionString) throws ELException {
         Object val = parseExpressionString(pExpressionString);
-        if (val instanceof String) {
-            return (String) val;
-        } else if (val instanceof Expression) {
+        if (val instanceof Expression) {
             return "${" + ((Expression) val).getExpressionString() + "}";
-        } else if (val instanceof ExpressionString) {
-            return ((ExpressionString) val).getExpressionString();
-        } else {
-            return "";
         }
+        if (val instanceof ExpressionString) {
+            return ((ExpressionString) val).getExpressionString();
+        }
+        return val instanceof String ? (String) val : "";
     }
 
     /**
@@ -431,8 +426,8 @@ public class ExpressionEvaluatorImpl extends ExpressionEvaluator {
         private Class expectedType;
         private FunctionMapper fMapper;
 
-        private JSTLExpression(String expression,
-                Class expectedType, FunctionMapper fMapper) {
+        private JSTLExpression(String expression, Class expectedType,
+                FunctionMapper fMapper) {
             this.expression = expression;
             this.expectedType = expectedType;
             this.fMapper = fMapper;
