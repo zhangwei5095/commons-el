@@ -28,8 +28,7 @@ import javax.servlet.jsp.el.VariableResolver;
  * 
  * @author Nathan Abramson - Art Technology Group
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
- **/
-
+ */
 public class VariableResolverImpl implements VariableResolver {
     // -------------------------------------
     // Member variables
@@ -41,7 +40,7 @@ public class VariableResolverImpl implements VariableResolver {
     /**
      *
      * Constructor
-     **/
+     */
     public VariableResolverImpl(PageContext pCtx) {
         mCtx = pCtx;
     }
@@ -51,7 +50,7 @@ public class VariableResolverImpl implements VariableResolver {
      *
      * Resolves the specified variable within the given context.
      * Returns null if the variable is not found.
-     **/
+     */
     public Object resolveVariable(String pName) throws ELException {
         // Check for implicit objects
         if ("pageContext".equals(pName)) {
