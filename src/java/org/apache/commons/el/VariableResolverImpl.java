@@ -56,35 +56,42 @@ public class VariableResolverImpl implements VariableResolver {
         // Check for implicit objects
         if ("pageContext".equals(pName)) {
             return mCtx;
-        } else if ("pageScope".equals(pName)) {
+        }
+        if ("pageScope".equals(pName)) {
             return ImplicitObjects.getImplicitObjects(mCtx).getPageScopeMap();
-        } else if ("requestScope".equals(pName)) {
+        }
+        if ("requestScope".equals(pName)) {
             return ImplicitObjects.getImplicitObjects(mCtx)
                     .getRequestScopeMap();
-        } else if ("sessionScope".equals(pName)) {
+        }
+        if ("sessionScope".equals(pName)) {
             return ImplicitObjects.getImplicitObjects(mCtx)
                     .getSessionScopeMap();
-        } else if ("applicationScope".equals(pName)) {
+        }
+        if ("applicationScope".equals(pName)) {
             return ImplicitObjects.getImplicitObjects(mCtx)
                     .getApplicationScopeMap();
-        } else if ("param".equals(pName)) {
+        }
+        if ("param".equals(pName)) {
             return ImplicitObjects.getImplicitObjects(mCtx).getParamMap();
-        } else if ("paramValues".equals(pName)) {
+        }
+        if ("paramValues".equals(pName)) {
             return ImplicitObjects.getImplicitObjects(mCtx).getParamsMap();
-        } else if ("header".equals(pName)) {
+        }
+        if ("header".equals(pName)) {
             return ImplicitObjects.getImplicitObjects(mCtx).getHeaderMap();
-        } else if ("headerValues".equals(pName)) {
+        }
+        if ("headerValues".equals(pName)) {
             return ImplicitObjects.getImplicitObjects(mCtx).getHeadersMap();
-        } else if ("initParam".equals(pName)) {
+        }
+        if ("initParam".equals(pName)) {
             return ImplicitObjects.getImplicitObjects(mCtx).getInitParamMap();
-        } else if ("cookie".equals(pName)) {
+        }
+        if ("cookie".equals(pName)) {
             return ImplicitObjects.getImplicitObjects(mCtx).getCookieMap();
         }
-
         // Otherwise, just look it up in the page context
-        else {
-            return mCtx.findAttribute(pName);
-        }
+        return mCtx.findAttribute(pName);
     }
 
     // -------------------------------------
