@@ -56,6 +56,10 @@ public class ELTest extends TestCase {
         assertEquals("true", evaluate("${true}"));
     }
 
+    public void testEL6() {
+        assertEquals("a''c", evaluate("${'a\\'\\'c'}"));
+    }
+
     private String evaluate(String input) {
         try {
             StringReader rdr = new StringReader(input);
