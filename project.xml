@@ -104,6 +104,15 @@
   </developers>
   
   <dependencies>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>3.8.1</version>
+        <properties>
+         <scope>test</scope>
+         <comment>Required only for testing.</comment>
+        </properties>
+      </dependency>
     <dependency>
       <groupId>servletapi</groupId>
       <artifactId>servletapi</artifactId>
