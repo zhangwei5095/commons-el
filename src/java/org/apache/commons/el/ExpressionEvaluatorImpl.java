@@ -86,9 +86,9 @@ import org.apache.commons.el.parser.TokenMgrError;
 public class ExpressionEvaluatorImpl
   extends ExpressionEvaluator
 {
-  // -------------------------------------
+  //-------------------------------------
   // Statics
-  // -------------------------------------
+  //-------------------------------------
   /** The mapping from expression String to its parsed form (String,
       Expression, or ExpressionString) **/
   static Map sCachedExpressionStrings =
@@ -98,14 +98,14 @@ public class ExpressionEvaluatorImpl
       parsed value **/
   static Map sCachedExpectedTypes = new HashMap ();
 
-  // -------------------------------------
+  //-------------------------------------
   // Member variables
-  // -------------------------------------
+  //-------------------------------------
 
   /** Flag if the cache should be bypassed **/
   boolean mBypassCache;
 
-  // -------------------------------------
+  //-------------------------------------
   /**
    *
    * Constructor
@@ -124,7 +124,7 @@ public class ExpressionEvaluatorImpl
     mBypassCache = pBypassCache;
   }
 
-  // -------------------------------------
+  //-------------------------------------
 
   /**
    *
@@ -148,9 +148,9 @@ public class ExpressionEvaluatorImpl
    *
    * @exception ELException Thrown if parsing errors were found.
    **/
-  public javax.servlet.jsp.el.Expression parseExpression (String expression,
-                                         Class expectedType,
-                                         FunctionMapper fMapper)
+  public javax.servlet.jsp.el.Expression parseExpression(String expression,
+                                                        Class expectedType,
+                                                        FunctionMapper fMapper)
     throws ELException
   {
     // Validate and then create an Expression object.
@@ -160,7 +160,7 @@ public class ExpressionEvaluatorImpl
     return new JSTLExpression (parsedExpression, expectedType, fMapper);
   }
 
-  // -------------------------------------
+  //-------------------------------------
   /**
    *
    * Evaluates the given expression String
@@ -181,10 +181,9 @@ public class ExpressionEvaluatorImpl
     throws ELException
   {
     // Check for null expression strings
-    if (pExpressionString == null)
-    {
+    if (pExpressionString == null) {
       throw new ELException
-        (Constants.NULL_EXPRESSION_STRING);
+       (Constants.NULL_EXPRESSION_STRING);
     }
 
     // Get the parsed version of the expression string
@@ -192,7 +191,7 @@ public class ExpressionEvaluatorImpl
     return evaluate (parsedValue, pExpectedType, pResolver, functions);
   }
 
-  // -------------------------------------
+  //-------------------------------------
   /**
    *
    * Evaluates the given parsed expression.
@@ -234,11 +233,13 @@ public class ExpressionEvaluatorImpl
       return convertToExpectedType (strValue, pExpectedType);
     }
 
-    // This should never be reached
-    return null;
+    else {
+      // This should never be reached
+      return null;
+    }
   }
 
-  // -------------------------------------
+  //-------------------------------------
   /**
    *
    * Gets the parsed form of the given expression string.  If the
@@ -250,8 +251,7 @@ public class ExpressionEvaluatorImpl
     throws ELException
   {
     // See if it's an empty String
-    if (pExpressionString.length () == 0)
-    {
+    if (pExpressionString.length () == 0) {
       return "";
     }
 
@@ -261,13 +261,11 @@ public class ExpressionEvaluatorImpl
       null :
       sCachedExpressionStrings.get (pExpressionString);
 
-    if (ret == null)
-    {
+    if (ret == null) {
       // Parse the expression
       Reader r = new StringReader (pExpressionString);
       ELParser parser = new ELParser (r);
-      try
-      {
+      try {
         ret = parser.ExpressionString ();
         sCachedExpressionStrings.put (pExpressionString, ret);
       }
@@ -289,19 +287,19 @@ public class ExpressionEvaluatorImpl
     return ret;
   }
 
-  // -------------------------------------
+  //-------------------------------------
   /**
    *
    * Converts the given value to the specified expected type.
    **/
   Object convertToExpectedType (Object pValue,
-         Class pExpectedType)
+                               Class pExpectedType)
     throws ELException
   {
     return Coercions.coerce (pValue, pExpectedType);
   }
 
-  // -------------------------------------
+  //-------------------------------------
   /**
    *
    * Converts the given String, specified as a static expression
@@ -312,27 +310,25 @@ public class ExpressionEvaluatorImpl
   {
     // See if the value is already of the expected type
     if (pExpectedType == String.class ||
-        pExpectedType == Object.class)
-    {
+      pExpectedType == Object.class) {
       return pValue;
     }
 
     // Find the cached value
     Map valueByString = getOrCreateExpectedTypeMap (pExpectedType);
     if (!mBypassCache &&
-        valueByString.containsKey (pValue))
-    {
+      valueByString.containsKey (pValue)) {
       return valueByString.get (pValue);
     }
     else {
-      // else Convert from a String
+      // Convert from a String
       Object ret = Coercions.coerce (pValue, pExpectedType);
       valueByString.put (pValue, ret);
       return ret;
     }
   }
 
-  // -------------------------------------
+  //-------------------------------------
   /**
    *
    * Creates or returns the Map that maps string literals to parsed
@@ -340,11 +336,9 @@ public class ExpressionEvaluatorImpl
    **/
   static Map getOrCreateExpectedTypeMap (Class pExpectedType)
   {
-    synchronized (sCachedExpectedTypes)
-    {
+    synchronized (sCachedExpectedTypes) {
       Map ret = (Map) sCachedExpectedTypes.get (pExpectedType);
-      if (ret == null)
-      {
+      if (ret == null) {
         ret = Collections.synchronizedMap (new HashMap ());
         sCachedExpectedTypes.put (pExpectedType, ret);
       }
@@ -352,16 +346,16 @@ public class ExpressionEvaluatorImpl
     }
   }
 
-  // -------------------------------------
+  //-------------------------------------
   // Formatting ParseException
-  // -------------------------------------
+  //-------------------------------------
   /**
    *
    * Formats a ParseException into an error message suitable for
    * displaying on a web page
    **/
   static String formatParseException (String pExpressionString,
-                ParseException pExc)
+                                     ParseException pExc)
   {
     // Generate the String of expected tokens
     StringBuffer expectedBuf = new StringBuffer ();
@@ -369,22 +363,18 @@ public class ExpressionEvaluatorImpl
     boolean printedOne = false;
 
     if (pExc.expectedTokenSequences == null)
-      return pExc.toString ();
+      return pExc.toString();
 
-    for (int i = 0; i < pExc.expectedTokenSequences.length; i++)
-    {
-      if (maxSize < pExc.expectedTokenSequences[i].length)
-      {
-        maxSize = pExc.expectedTokenSequences[i].length;
+    for (int i = 0; i < pExc.expectedTokenSequences.length; i++) {
+      if (maxSize < pExc.expectedTokenSequences [i].length) {
+        maxSize = pExc.expectedTokenSequences [i].length;
       }
-      for (int j = 0; j < pExc.expectedTokenSequences[i].length; j++)
-      {
-        if (printedOne)
-        {
+      for (int j = 0; j < pExc.expectedTokenSequences[i].length; j++) {
+        if (printedOne) {
           expectedBuf.append (", ");
         }
         expectedBuf.append
-          (pExc.tokenImage[pExc.expectedTokenSequences [i] [j]]);
+          (pExc.tokenImage [pExc.expectedTokenSequences [i] [j]]);
         printedOne = true;
       }
     }
@@ -393,12 +383,10 @@ public class ExpressionEvaluatorImpl
     // Generate the String of encountered tokens
     StringBuffer encounteredBuf = new StringBuffer ();
     Token tok = pExc.currentToken.next;
-    for (int i = 0; i < maxSize; i++)
-    {
+    for (int i = 0; i < maxSize; i++) {
       if (i != 0) encounteredBuf.append (" ");
 
-      if (tok.kind == 0)
-      {
+      if (tok.kind == 0) {
         encounteredBuf.append (pExc.tokenImage[0]);
         break;
       }
@@ -410,13 +398,13 @@ public class ExpressionEvaluatorImpl
     // Format the error message
     return MessageFormat.format
       (Constants.PARSE_EXCEPTION,
-      new Object[] {
+       new Object[] {
         expected,
         encountered,
-      });
+       });
   }
 
-  // -------------------------------------
+  //-------------------------------------
   /**
    *
    * Used to convert raw characters to their escaped version when
@@ -427,10 +415,8 @@ public class ExpressionEvaluatorImpl
   {
     StringBuffer retval = new StringBuffer ();
     char ch;
-    for (int i = 0, length = str.length (); i < length; i++)
-    {
-      switch (str.charAt (i))
-      {
+    for (int i = 0, length = str.length (); i < length; i++) {
+      switch (str.charAt (i)) {
       case 0:
         continue;
       case '\b':
@@ -449,8 +435,7 @@ public class ExpressionEvaluatorImpl
         retval.append ("\\r");
         continue;
       default:
-        if ((ch = str.charAt (i)) < 0x20 || ch > 0x7e)
-        {
+        if ((ch = str.charAt (i)) < 0x20 || ch > 0x7e) {
           String s = "0000" + Integer.toString (ch, 16);
           retval.append ("\\u" + s.substring (s.length () - 4, s.length ()));
         }
@@ -463,9 +448,9 @@ public class ExpressionEvaluatorImpl
     return retval.toString ();
   }
 
-  // -------------------------------------
+  //-------------------------------------
   // Testing methods
-  // -------------------------------------
+  //-------------------------------------
   /**
    *
    * Parses the given expression string, then converts it back to a
@@ -478,12 +463,10 @@ public class ExpressionEvaluatorImpl
     if (val instanceof String) {
       return (String) val;
     }
-    else if (val instanceof Expression)
-    {
+    else if (val instanceof Expression) {
       return "${" + ((Expression) val).getExpressionString () + "}";
     }
-    else if (val instanceof ExpressionString)
-    {
+    else if (val instanceof ExpressionString) {
       return ((ExpressionString) val).getExpressionString ();
     }
     else {
@@ -517,6 +500,6 @@ public class ExpressionEvaluatorImpl
     }
   }
 
-  // -------------------------------------
+  //-------------------------------------
 
 }
