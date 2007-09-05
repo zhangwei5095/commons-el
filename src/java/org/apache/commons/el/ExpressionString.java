@@ -30,7 +30,7 @@ import javax.servlet.jsp.el.VariableResolver;
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
  **/
 
-public class ExpressionString
+public class ExpressionString extends Expression
 {
   //-------------------------------------
   // Properties
@@ -60,7 +60,7 @@ public class ExpressionString
    * converting it to a String (using toString, or "" for null values)
    * and concatenating the results into a single String.
    **/
-  public String evaluate (VariableResolver pResolver,
+  public Object evaluate (VariableResolver pResolver,
 			  FunctionMapper functions)
     throws ELException
   {
@@ -104,4 +104,16 @@ public class ExpressionString
   }
 
   //-------------------------------------
+
+  public Expression bindFunctions(FunctionMapper functions) throws ELException {
+      final Object[] boundElements = new Object[mElements.length];
+      for (int i = 0; i < mElements.length; i++) {
+          if (mElements[i] instanceof Expression) {
+              boundElements[i] = ((Expression)mElements[i]).bindFunctions(functions);
+          } else {
+              boundElements[i] = mElements[i];
+          }
+      }
+      return new ExpressionString(boundElements);
+  }
 }

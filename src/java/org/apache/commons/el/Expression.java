@@ -53,4 +53,17 @@ public abstract class Expression
 
   //-------------------------------------
 
+  /**
+   * Returns an expression with all <code>FunctionInvocation</code>s replaced by
+   * <code>BoundFunctionInvocation</code>s.
+   * @param functions the functions to use in this transformation
+   * @return an Expression identical to this expression except with all
+   *    <code>FunctionInvocation</code>s replaced by
+   *    <code>BoundFunctionInvocation</code>s.
+   * @throws ELException if any of the functions in this <code>Expression</code> are
+   *    not present in <code>functions</code>
+   */
+  public abstract Expression bindFunctions(FunctionMapper functions)
+      throws ELException;
+
 }

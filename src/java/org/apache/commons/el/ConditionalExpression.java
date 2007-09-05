@@ -113,5 +113,12 @@ public class ConditionalExpression
       return mFalseBranch.evaluate(vr, f);
   }
 
+  public Expression bindFunctions(final FunctionMapper functions) throws ELException {
+       return new ConditionalExpression(
+               mCondition.bindFunctions(functions),
+               mTrueBranch.bindFunctions(functions),
+               mFalseBranch.bindFunctions(functions));
+  }
+
   //-------------------------------------
 }

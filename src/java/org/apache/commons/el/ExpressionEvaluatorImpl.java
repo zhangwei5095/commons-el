@@ -153,11 +153,14 @@ public class ExpressionEvaluatorImpl
                                                         FunctionMapper fMapper)
     throws ELException
   {
-    // Validate and then create an Expression object.
-    Object parsedExpression = parseExpressionString (expression);
-
-    // Create an Expression object that knows how to evaluate this.
-    return new JSTLExpression (parsedExpression, expectedType, fMapper);
+       // Create an Expression object that knows how to evaluate this.
+       final Object parsedExpression = parseExpressionString(expression);
+       if (parsedExpression instanceof Expression) {
+           return new JSTLExpression(this, (Expression)parsedExpression, expectedType, fMapper);
+       } else {
+           // this had better be a string
+           return new JSTLExpression(this, (String)parsedExpression, expectedType, fMapper);
+       }
   }
 
   //-------------------------------------
@@ -208,36 +211,30 @@ public class ExpressionEvaluatorImpl
   public Object evaluate (Object parsedExpression, Class pExpectedType,
       VariableResolver pResolver, FunctionMapper functions) throws ELException
   {
-    // Evaluate differently based on the parsed type
-    if (parsedExpression instanceof String)
-    {
-      // Convert the String, and cache the conversion
-      String strValue = (String) parsedExpression;
-      return convertStaticValueToExpectedType (strValue, pExpectedType);
-    }
-
-    if (parsedExpression instanceof Expression)
-    {
-      // Evaluate the expression and convert
-      Object value =
-        ((Expression) parsedExpression).evaluate (pResolver,
-                                        functions);
-      return convertToExpectedType (value, pExpectedType);
-    }
-
-    if (parsedExpression instanceof ExpressionString)
-    {
-      // Evaluate the expression/string list and convert
-      String strValue =
-        ((ExpressionString) parsedExpression).evaluate (pResolver, functions);
-      return convertToExpectedType (strValue, pExpectedType);
-    }
-
-    else {
-      // This should never be reached
-      return null;
-    }
+      return evaluateParsedValue(parsedExpression, pExpectedType, pResolver, functions);
   }
+
+  private Object evaluateParsedValue(Object parsedValue, Class pExpectedType, VariableResolver pResolver, FunctionMapper functions) throws ELException {
+        // Evaluate differently based on the parsed type
+        if (parsedValue instanceof String) {
+          // Convert the String, and cache the conversion
+          String strValue = (String) parsedValue;
+          return convertStaticValueToExpectedType (strValue, pExpectedType);
+        }
+
+        else if (parsedValue instanceof Expression) {
+          // Evaluate the expression and convert
+          Object value =
+        ((Expression) parsedValue).evaluate (pResolver,
+                            functions);
+          return convertToExpectedType (value, pExpectedType);
+        }
+
+        else {
+          // This should never be reached
+          return null;
+        }
+    }
 
   //-------------------------------------
   /**
@@ -481,24 +478,40 @@ public class ExpressionEvaluatorImpl
   private class JSTLExpression
     extends javax.servlet.jsp.el.Expression
   {
+    private ExpressionEvaluatorImpl evaluator;
     private Object parsedExpression;
     private Class expectedType;
-    private FunctionMapper fMapper;
 
-    private JSTLExpression(Object parsedExpression, Class expectedType,
-        FunctionMapper fMapper)
-    {
-      this.parsedExpression = parsedExpression;
+    public JSTLExpression(
+            final ExpressionEvaluatorImpl evaluator,
+            final Expression expression,
+            final Class expectedType,
+            final FunctionMapper fMapper)
+    throws ELException {
+      this.evaluator = evaluator;
+      this.parsedExpression = expression.bindFunctions(fMapper);
       this.expectedType = expectedType;
-      this.fMapper = fMapper;
     }
-
-    public Object evaluate (VariableResolver vResolver) throws ELException
-    {
-      return ExpressionEvaluatorImpl.this.evaluate
-        (parsedExpression, expectedType, vResolver, fMapper);
-    }
-  }
+    public JSTLExpression(
+            final ExpressionEvaluatorImpl evaluator,
+            final String expressionString,
+            final Class expectedType,
+            final FunctionMapper fMapper)
+    throws ELException {
+       this.evaluator = evaluator;
+       this.parsedExpression = expressionString;
+       this.expectedType = expectedType;
+     }
+    
+     public Object evaluate( VariableResolver vResolver )
+       throws ELException
+     {
+      return evaluator.evaluateParsedValue(this.parsedExpression,
+               this.expectedType,
+               vResolver,
+               null);
+     }
+   }
 
   //-------------------------------------
 

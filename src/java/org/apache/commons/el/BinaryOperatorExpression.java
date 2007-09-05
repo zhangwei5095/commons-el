@@ -17,6 +17,8 @@
 package org.apache.commons.el;
 
 import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 import javax.servlet.jsp.el.ELException;
 import javax.servlet.jsp.el.FunctionMapper;
@@ -131,6 +133,19 @@ public class BinaryOperatorExpression
     }
     return value;
   }
+
+    public Expression bindFunctions(final FunctionMapper functions) throws ELException {
+        final List args = new ArrayList(mExpressions.size());
+        for (Iterator argIter = mExpressions.iterator(); argIter.hasNext();) {
+            args.add(((Expression)argIter.next()).bindFunctions(functions));
+        }
+        // it would be nice if we knew for sure that the operators list
+        // was immutable, but we'll just assume so for now.
+        return new BinaryOperatorExpression(
+                mExpression.bindFunctions(functions),
+                mOperators,
+                args);
+    }
 
   //-------------------------------------
 }

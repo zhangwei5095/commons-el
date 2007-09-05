@@ -126,5 +126,12 @@ public class UnaryOperatorExpression
     return value;
   }
 
+  public Expression bindFunctions(final FunctionMapper functions) throws ELException {
+      return new UnaryOperatorExpression(
+              mOperator,
+              mOperators,
+              mExpression.bindFunctions(functions));
+  }
+
   //-------------------------------------
 }

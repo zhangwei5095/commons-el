@@ -66,5 +66,10 @@ public abstract class Literal
     return mValue;
   }
 
+  public Expression bindFunctions(FunctionMapper functions) throws ELException {
+      return this;
+  }
+   
+
   //-------------------------------------
 }

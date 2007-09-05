@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.servlet.jsp.el.ELException;
 import javax.servlet.jsp.el.FunctionMapper;
@@ -97,30 +98,7 @@ public class FunctionInvocation
     throws ELException
   {
 
-    // if the Map is null, then the function is invalid
-    if (functions == null) {
-        if (log.isErrorEnabled()) {
-            String message = MessageUtil.getMessageWithArgs(
-                Constants.UNKNOWN_FUNCTION, functionName);
-            log.error(message);
-            throw new ELException(message);
-        }
-    }            
-
-    // normalize function name
-    String prefix = null;
-    String localName = null;
-    int index = functionName.indexOf( ':' );
-    if (index == -1) {
-      prefix = "";
-      localName = functionName;
-    } else {
-      prefix = functionName.substring( 0, index );
-      localName = functionName.substring( index + 1 );
-    }
-
-    // ensure that the function's name is mapped
-    Method target = (Method) functions.resolveFunction(prefix, localName);
+    Method target = resolveFunction(functions);
     if (target == null) {
         if (log.isErrorEnabled()) {
             String message = MessageUtil.getMessageWithArgs(
@@ -177,6 +155,50 @@ public class FunctionInvocation
       return null;
     }
   }
+
+  /**
+   * Returns the <code>Method</code> which is mapped to the function
+   * name used by this <code>FunctionInvocation</code>.
+   * @param functions The function mappings in use for this evaluation
+   * @return the <code>Method</code> to execute 
+   * @throws ELException
+   */
+  protected Method resolveFunction(FunctionMapper functions) throws ELException {
+      // if the Map is null, then the function is invalid 
+      if (functions == null) { 
+          return null;
+      }                    
+
+      // normalize function name
+      String prefix = null; 
+      String localName = null; 
+      int index = functionName.indexOf( ':' );
+      if (index == -1) {
+        prefix = "";
+        localName = functionName;
+      } else {
+        prefix = functionName.substring( 0, index );
+        localName = functionName.substring( index + 1 );
+      }       
+  
+      // ensure that the function's name is mapped
+      Method target = (Method) functions.resolveFunction(prefix, localName);
+   
+       return target; 
+   }
+
+   public Expression bindFunctions(final FunctionMapper functions)
+           throws ELException {
+       final List argList = new ArrayList(argumentList.size());
+       for (Iterator argIter = argumentList.iterator(); argIter.hasNext();) {
+           Expression arg = (Expression) argIter.next();
+           argList.add(arg.bindFunctions(functions));
+       }
+       return new BoundFunctionInvocation(
+               resolveFunction(functions),
+               functionName,
+               argList);
+   }
 
   //-------------------------------------
 }

@@ -296,5 +296,8 @@ public class ArraySuffix
         return null;
     }
 
+    public ValueSuffix bindFunctions(final FunctionMapper functions) throws ELException {
+        return new ArraySuffix(mIndex.bindFunctions(functions));
+    }
     //-------------------------------------
 }

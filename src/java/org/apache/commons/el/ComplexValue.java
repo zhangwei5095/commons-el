@@ -17,6 +17,7 @@
 package org.apache.commons.el;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.servlet.jsp.el.ELException;
 import javax.servlet.jsp.el.FunctionMapper;
@@ -107,6 +108,15 @@ public class ComplexValue
     }
 
     return ret;
+  }
+
+  public Expression bindFunctions(final FunctionMapper functions) throws ELException {
+      final List suffixes = new ArrayList(mSuffixes.size());
+      for (int i = 0; mSuffixes != null && i < mSuffixes.size (); i++) {
+          ValueSuffix suffix = (ValueSuffix) mSuffixes.get (i);
+          suffixes.add(suffix.bindFunctions(functions));
+      }
+      return new ComplexValue(mPrefix.bindFunctions(functions), suffixes);
   }
 
   //-------------------------------------

@@ -84,5 +84,9 @@ public class NamedValue
     }
   }
 
+  public Expression bindFunctions(FunctionMapper functions) throws ELException {
+      return this;
+  }
+
   //-------------------------------------
 }

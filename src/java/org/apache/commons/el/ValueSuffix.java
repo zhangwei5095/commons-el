@@ -51,5 +51,8 @@ public abstract class ValueSuffix
 				   FunctionMapper functions)
     throws ELException;
 
+  public abstract ValueSuffix bindFunctions(FunctionMapper functions)
+  throws ELException;
+
   //-------------------------------------
 }
