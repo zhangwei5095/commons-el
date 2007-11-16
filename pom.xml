@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>4</version>
+    <version>5</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -95,10 +95,22 @@
       <scope>provided</scope>
       <optional>true</optional>
     </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
+
+  <properties>
+    <maven.compile.source>1.4</maven.compile.source>
+    <maven.compile.target>1.4</maven.compile.target>
+  </properties> 
 
   <build>
     <sourceDirectory>src/java</sourceDirectory>
+    <testSourceDirectory>src/test</testSourceDirectory>
     <resources>
       <resource>
         <directory>.</directory>
@@ -111,11 +123,13 @@
     </resources>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
+        <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
-          <source>1.4</source>
-          <target>1.4</target>
+          <descriptors>
+            <descriptor>src/assembly/bin.xml</descriptor>
+            <descriptor>src/assembly/src.xml</descriptor>
+          </descriptors>
+          <tarLongFileMode>gnu</tarLongFileMode>
         </configuration>
       </plugin>
     </plugins>

@@ -21,7 +21,7 @@ under the License.
   <bannerRight>
     <name>Commons EL</name>
     <src>images/el-logo-white.png</src>
-    <href>http://commons.apache.org/el/</href>
+    <href>/index.html</href>
   </bannerRight>
   <body>
     <menu name="Commons EL">
@@ -31,7 +31,7 @@ under the License.
       <item name="Mailing lists"     href="/mail-lists.html"/>
       <item name="Issue Tracking"    href="/issue-tracking.html"/>
       <item name="Proposal"          href="/proposal.html"/>
-      <item name="Source Repository" href="/cvs-usage.html"/>
+      <item name="Source Repository" href="/source-repository.html"/>
       <item name="Javadoc (latest)"  href="/apidocs/index.html"/>
     </menu>
   </body>
