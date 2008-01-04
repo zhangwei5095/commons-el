@@ -101,6 +101,15 @@
       <email>jan.luehe@sun.com</email>
       <organization>Sun Microsystems, Inc.</organization>
     </developer>
+    <developer>
+      <name>Hans Bergsten</name>
+    </developer>
+    <developer>
+      <name>Kin-Man Chung</name>
+    </developer>
+    <developer>
+      <name>Mark Roth</name>
+    </developer>
   </developers>
   
   <dependencies>
