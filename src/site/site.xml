@@ -26,7 +26,7 @@ under the License.
   <body>
     <menu name="Commons EL">
       <item name="Overview"          href="/index.html"/>
-      <item name="Download"          href="http://commons.apache.org/downloads/download_el.cgi"/>
+      <item name="Download"          href="http://commons.apache.org/el/download_el.cgi"/>
       <item name="Javadoc (Release)" href="http://commons.apache.org/el/api/index.html"/>
       <item name="Mailing lists"     href="/mail-lists.html"/>
       <item name="Issue Tracking"    href="/issue-tracking.html"/>
