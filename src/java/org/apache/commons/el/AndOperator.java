@@ -62,7 +62,8 @@ public class AndOperator
    *
    * Applies the operator to the given value
    **/
-  public Object apply (Object pLeft, Object pRight)
+  public Object apply (Object pLeft,
+		       Object pRight)
     throws ELException
   {
     // Coerce the values to booleans

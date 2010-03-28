@@ -37,7 +37,8 @@ public abstract class ArithmeticOperator
    *
    * Applies the operator to the given value
    **/
-  public Object apply (Object pLeft, Object pRight)
+  public Object apply (Object pLeft,
+		       Object pRight)
     throws ELException
   {
     return Coercions.applyArithmeticOperator (pLeft, pRight, this);
