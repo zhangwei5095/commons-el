@@ -52,7 +52,7 @@ JSP 2.0 adopted the EL specification from JSTL, and expanded its scope: EL expre
 Release Notes</a> document the new features and bug fixes that have been
 included in the latest release.</p>
 
-<p>The <a href="http://commons.apache.org/el/api/index.html">
+<p>The <a href="http://commons.apache.org/el/javadocs/commons-el-1.0/">
 JavaDoc API documents</a> for the latest release are available online.  
 In particular, you should read the package overview of the <code>org.apache.commons.el</code> package.</p>
 
