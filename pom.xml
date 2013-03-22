@@ -34,7 +34,7 @@
   <inceptionYear>2003</inceptionYear>
   <description>JSP 2.0 Expression Language Interpreter Implementation</description>
 
-  <url>http://commons.apache.org/el/</url>
+  <url>http://commons.apache.org/proper/commons-el/</url>
 
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/commons/proper/el/trunk</connection>
