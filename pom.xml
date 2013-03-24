@@ -53,7 +53,7 @@
       <name>Shawn Bayern</name>
       <id>shawn</id>
       <email>shawn@apache.org</email>
-      <organization>Apache Software Foundation</organization>
+      <organization>The Apache Software Foundation</organization>
     </developer>
     <developer>
       <name>Pierre Delisle</name>
@@ -65,7 +65,7 @@
       <name>Craig McClanahan</name>
       <id>craigmcc</id>
       <email>craigmcc@apache.org</email>
-      <organization>Apache Software Foundation</organization>
+      <organization>The Apache Software Foundation</organization>
     </developer>
     <developer>
       <name>Jan Luehe</name>
