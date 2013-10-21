@@ -26,7 +26,7 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <name>Commons EL</name>
+  <name>Apache Commons EL</name>
   <groupId>commons-el</groupId>
   <artifactId>commons-el</artifactId>
   <version>1.0.1-SNAPSHOT</version>
